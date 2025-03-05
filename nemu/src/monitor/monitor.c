@@ -114,7 +114,7 @@ int init_monitor(int argc, char *argv[]) {
   init_log();
 
   /* Test the implementation of the `CPU_state' structure. */
-  reg_test();
+  reg_test();//生成随机数据
 
 #ifdef DIFF_TEST
   /* Fork a child process to perform differential testing. */
@@ -122,7 +122,7 @@ int init_monitor(int argc, char *argv[]) {
 #endif
 
   /* Load the image to memory. */
-  load_img();
+  load_img();//读入客户程序镜像
 
   /* Initialize this virtual computer system. */
   restart();
@@ -137,7 +137,7 @@ int init_monitor(int argc, char *argv[]) {
   init_device();
 
   /* Display welcome message. */
-  welcome();
+  welcome();//输出
 
   return is_batch_mode;
 }

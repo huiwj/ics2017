@@ -2,6 +2,7 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
+#include "memory.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -37,6 +38,76 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_help(char *args);
+
+static int cmd_si (char *args)
+{
+  int n=1;
+
+  if (args != NULL)
+  {
+    sscanf(args,"%d",&n);
+  }
+
+  cpu_exec(n);
+  return 0;
+}
+
+static int cmd_info(char *args)
+{
+  if (strcmp(args,"r")==0)
+  {
+    for(int i=0;i<8;i++)
+    {
+      printf("%s:0x%08x\t",reg_name(i,4),reg_l(i));
+    }
+  }
+  else if (strcmp(args,"w")==0)
+  {
+    print_watchpoints();
+  }
+  return 0;
+}
+
+static int cmd_x(char *args)
+{
+  if(args == NULL)
+  {
+    printf("x N EXPR\n");
+    return 0;
+  }
+
+  //解析参数
+  int n=1;
+  char expr_ptr[256] = {0};
+  
+  int matched = sscanf(args,"%d %255s",&n ,expr_ptr);
+  if(matched<=0)
+  {
+    printf("wrong N\n");
+    return 0;
+  }
+
+  bool success = false;
+  uint32_t start_addr = expr(expr_ptr,&success) ;
+
+  //计算expr
+  if(!success)
+  {
+    printf("wrong expr\n");
+    return 0;
+  }
+
+  //输出连续n个字节块
+  printf("0x%x:\t  ",start_addr);
+  for(int i =0;i<n;i++)
+  {
+    uint32_t data = vaddr_read(start_addr+i*4,4);
+    printf("0x%08x:0x%08x\n",start_addr+i*4,data);
+  }
+
+  return 0;
+
+}
 
 static struct {
   char *name;
