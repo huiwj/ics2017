@@ -7,7 +7,25 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ
+  TK_NOTYPE = 256, //空白
+  TK_EQ =1,
+  TK_NEQ,
+  TK_AND,
+  TK_OR,
+  TK_NOT,
+  TK_NUM,
+  TK_REG,
+  TK_HEX,//十六进制
+  TK_DEREF, //指针解引用
+
+  TK_LEFT,
+  TK_RIGHT,
+
+  TK_ADD,
+  TK_SUB,
+  TK_MUL,
+  TK_DIV,
+  TK_MOD
 
   /* TODO: Add more token types */
 
