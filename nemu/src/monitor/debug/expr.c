@@ -24,8 +24,7 @@ enum {
   TK_ADD,
   TK_SUB,
   TK_MUL,
-  TK_DIV,
-  TK_MOD
+  TK_DIV
 
   /* TODO: Add more token types */
 
@@ -41,8 +40,24 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ}         // equal
+  {"\\+", TK_ADD},         // plus
+  {"==", TK_EQ},        // equal
+  {"!=", TK_NEQ},
+  {"\\&\\&",TK_AND},
+  {"\\|\\|",TK_OR},
+  {"!",TK_NOT},
+  {"[0-9]*",TK_NUM},
+  {"\\$[a-zA-z]*[0-9]*",TK_REG},
+  {"0x[0-9a-fA-F]+",TK_HEX},
+  {"\\*",TK_DEREF},
+  {"\\(",TK_LEFT},
+  {"\\)",TK_RIGHT},
+  {"\\-",TK_SUB},
+  {"\\*",TK_MUL},
+  {"\\/",TK_DIV}
+
+
+           
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
