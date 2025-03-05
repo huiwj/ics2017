@@ -87,7 +87,7 @@ static int cmd_x(char *args)
     return 0;
   }
 
-  bool success = false;
+  bool success = true;
   uint32_t start_addr = expr(expr_ptr,&success) ;
 
   //计算expr
@@ -107,6 +107,24 @@ static int cmd_x(char *args)
 
   return 0;
 
+}
+
+static int cmd_p (char *args)
+{
+  bool success = true;
+  uint32_t exp = expr(args,&success) ;
+
+  //计算expr
+  if(!success)
+  {
+    printf("wrong expr\n");
+    return 0;
+  }else
+  {
+    printf("%u\n",exp);
+    return 0;
+  }
+  
 }
 
 static struct {
