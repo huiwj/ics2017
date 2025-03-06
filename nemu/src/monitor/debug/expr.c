@@ -136,7 +136,7 @@ static bool make_token(char *e) {
             {
               tokens[nr_token].str[j]=substr_start[j];
             }
-            tokens[nr_token].str[substr_len] = "\0";
+            tokens[nr_token].str[substr_len] = 0;
 
             nr_token++;
 
@@ -176,7 +176,7 @@ static bool make_token(char *e) {
             {
               tokens[nr_token].str[j]=substr_start[j];
             }
-            tokens[nr_token].str[substr_len] = "\0";
+            tokens[nr_token].str[substr_len] = 0;
 
             nr_token++;
 
@@ -201,7 +201,7 @@ static bool make_token(char *e) {
             {
               tokens[nr_token].str[j]=substr_start[j];
             }
-            tokens[nr_token].str[substr_len] = "\0";
+            tokens[nr_token].str[substr_len] = 0;
 
             nr_token++;
 
