@@ -18,7 +18,7 @@ enum {
   TK_NUM,
   TK_REG,
   TK_HEX,//十六进制
-  //TK_DEREF, //指针解引用
+  TK_DEREF, //指针解引用
 
   TK_LEFT,
   TK_RIGHT,
@@ -254,28 +254,6 @@ static bool make_token(char *e) {
   return true;
 }
 
-uint32_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
-    *success = false;
-    return 0;
-  }
-
-  /* TODO: Insert codes to evaluate the expression. */
-  //TODO();
-
-  for (int i=0;i<nr_token;i++)
-  {
-    //单目运算符 负号
-    if(tokens[i].type == TK_SUB && (i==0 || tokens[i-1].type == TK_ADD || tokens[i-1].type == TK_SUB ||tokens[i-1].type == TK_MUL
-        ||tokens[i-1].type == TK_DIV || tokens[i-1].type == TK_LEFT ||tokens[i-1].type == TK_RIGHT ||tokens[i-1].type == TK_EQ
-        || tokens[i-1].type == TK_NEQ || tokens[i-1].type == TK_AND || tokens[i-1].type == TK_OR || tokens[i-1].type == TK_NOT))
-        {
-          tokens[i].type = TK_NEG;
-        }
-  }
-
-  return 0;
-}
 
 int check_parenthese(int p ,int q)
 {
@@ -345,6 +323,7 @@ int get_precedence(int type) //优先级匹配
   case TK_LEFT:
   case TK_RIGHT:
   case TK_NEG:
+  case TK_DEREF:
     return 6;
   default:
     return -1;
@@ -357,6 +336,7 @@ bool is_right(int type) //判断是否是右结合
   {
   case TK_NOT:
   case TK_NEG:
+  case TK_DEREF:
     return true;
   
   default:
@@ -508,6 +488,9 @@ uint32_t eval(int p,int q)
     case TK_NEG:
       return -eval(p+1,q);
     
+    case TK_DEREF:
+      return vaddr_read(eval(p+1,q),4);
+    
     default:
       break;
     }
@@ -544,4 +527,33 @@ uint32_t eval(int p,int q)
 
 }
 
+uint32_t expr(char *e, bool *success) {
+  if (!make_token(e)) {
+    *success = false;
+    return 0;
+  }
+
+  /* TODO: Insert codes to evaluate the expression. */
+  //TODO();
+
+  for (int i=0;i<nr_token;i++)
+  {
+    //单目运算符 负号
+    if(tokens[i].type == TK_SUB && (i==0 || tokens[i-1].type == TK_ADD || tokens[i-1].type == TK_SUB ||tokens[i-1].type == TK_MUL
+        ||tokens[i-1].type == TK_DIV || tokens[i-1].type == TK_LEFT ||tokens[i-1].type == TK_RIGHT ||tokens[i-1].type == TK_EQ
+        || tokens[i-1].type == TK_NEQ || tokens[i-1].type == TK_AND || tokens[i-1].type == TK_OR || tokens[i-1].type == TK_NOT))
+        {
+          tokens[i].type = TK_NEG;
+        }
+
+      if(tokens[i].type == TK_MUL && (i==0 || tokens[i-1].type == TK_ADD || tokens[i-1].type == TK_SUB ||tokens[i-1].type == TK_MUL
+        ||tokens[i-1].type == TK_DIV || tokens[i-1].type == TK_LEFT ||tokens[i-1].type == TK_RIGHT ||tokens[i-1].type == TK_EQ
+        || tokens[i-1].type == TK_NEQ || tokens[i-1].type == TK_AND || tokens[i-1].type == TK_OR || tokens[i-1].type == TK_NOT))
+        {
+          tokens[i].type = TK_DEREF;
+        }
+  }
+
+  return eval(0,nr_token - 1);
+}
 
