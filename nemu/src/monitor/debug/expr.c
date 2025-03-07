@@ -264,16 +264,18 @@ uint32_t expr(char *e, bool *success) {
   return 0;
 }
 
-bool check_parenthese(int p ,int q)
+int check_parenthese(int p ,int q)
 {
-  int left = 0;
-  int is_closed = true;
+  int left = 0; //括号匹配
+  int is_closed = false; //最外层括号
+  int flag =0;
 
-  if(tokens[p].type!=TK_LEFT||tokens[q].type !=TK_RIGHT)
+  if(tokens[p].type==TK_LEFT&&tokens[q].type ==TK_RIGHT)
   {
-    return false;
+    flag =1;
 
   }
+  
 
   for (int i=p;i<=q;i++)
   {
@@ -286,20 +288,121 @@ bool check_parenthese(int p ,int q)
       left --;
     }
 
-    if(left<0)
+    if(left<0) //不匹配
     {
-      return false;
+      return -1;
     }
 
-    if(left == 0 && i!=q)
+    if(left == 0 && i!=q) //最外层不匹配
     {
+      flag = 0;
       is_closed = false;
     }
   }
 
-  if(left == 0 && is_closed == true)
+  if(left == 0 && flag == 1 && is_closed == 1) //最外层成功匹配
   {
-    return true;
+    return 1;
   }
-  else return false;
+  else if(left == 0 && flag == 0)
+  {
+    return 0; //内层匹配
+  }
+  else return -1;//不匹配
 }
+
+int get_precedence(int type) //优先级匹配
+{
+  switch (type)
+  {
+  case TK_OR:
+    return 1;
+  case TK_AND:
+    return 2;
+  case TK_EQ:
+  case TK_NEQ:
+    return 3;
+  case TK_ADD:
+  case TK_SUB:
+    return 4;
+  case TK_DIV:
+  case TK_MUL:
+    return 5;
+  case TK_NOT:
+  case TK_LEFT:
+  case TK_RIGHT:
+    return 6;
+  default:
+    return -1;
+  }
+}
+
+bool is_right(int type) //判断是否是右结合
+{
+  switch (type)
+  {
+  case TK_NOT:
+    return true;
+  
+  default:
+    return false;
+  }
+}
+
+int find_dominant_operator(int p,int q)
+{
+  int min_op = 10000;
+  int main_op = -1;
+  int left = 0 ;
+
+  for(int i = p;i <= q; i++)
+  {
+    if(tokens[i].type == TK_LEFT)
+    {
+      left ++;
+    }else if(tokens[i].type ==  TK_RIGHT)
+    {
+      left--;
+    }
+
+    if(left != 0) //跳过括号
+    {
+      continue;
+    }
+
+    int op = get_precedence(tokens[i].type);
+
+    if(op == -1) //非运算符
+    {
+      continue;
+    }
+
+    if(op>min_op) //运算级高
+    {
+      continue;
+    }
+    else 
+      if(op < min_op) //更低的运算级
+      {
+        min_op = op;
+        main_op = i;
+      }
+      else //相同运算级
+        {
+          if(is_right(tokens[i].type)) //右结合取最右边
+          {
+            main_op = i;
+          }
+          else
+          {
+            if(main_op < 0) //左结合第一次出现
+            {
+              main_op = i;
+            }
+          }
+        }
+  } 
+  return main_op;
+}
+
+
