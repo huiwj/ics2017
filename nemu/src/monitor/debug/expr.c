@@ -263,3 +263,43 @@ uint32_t expr(char *e, bool *success) {
 
   return 0;
 }
+
+bool check_parenthese(int p ,int q)
+{
+  int left = 0;
+  int is_closed = true;
+
+  if(tokens[p].type!=TK_LEFT||tokens[q].type !=TK_RIGHT)
+  {
+    return false;
+
+  }
+
+  for (int i=p;i<=q;i++)
+  {
+    if(tokens[i].type == TK_LEFT)
+    {
+      left ++;
+    }
+    else if(tokens[i].type == TK_RIGHT)
+    {
+      left --;
+    }
+
+    if(left<0)
+    {
+      return false;
+    }
+
+    if(left == 0 && i!=q)
+    {
+      is_closed = false;
+    }
+  }
+
+  if(left == 0 && is_closed == true)
+  {
+    return true;
+  }
+  else return false;
+}
