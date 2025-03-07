@@ -405,4 +405,123 @@ int find_dominant_operator(int p,int q)
   return main_op;
 }
 
+uint32_t eval(int p,int q)
+{
+  if(p>q)
+  {
+    printf("Bad expression\n");
+    assert(0);
+  }
+  else if(p == q)
+  {
+    if(tokens[p].type == TK_NUM)
+    {
+      int value = 0;
+      for(int i=0;tokens[p].str[i]!=0;i++)
+      {
+        value = value * 10 + (tokens[p].str[i]-'0');
+      }
+      return value;
+    }
+
+    else if (tokens[p].type == TK_HEX)  //解析十六进制数
+    {
+      int value = 0;
+      ssacnf(tokens[p].str,"%x",&value);
+      return value;
+    }
+    else if (tokens[p].type == TK_REG)
+    {
+      if (strlen(tokens[p].str)==3)
+      {
+        for (int i=0;i<8;i++)
+        {
+          return reg_l(i); //32位寄存器
+        }
+
+        if(strcmp(tokens[p].str,"eip")==0)
+        {
+          return cpu.eip; //特殊处理
+        }
+      }
+      else if(strlen(tokens[p].str)==2)
+      {
+        for (int i=0;i<8;i++)
+        {
+          if(strcmp(tokens[p].str,reg_name(i,2))==0)
+          {
+            return reg_w(i); //16
+          }
+
+           if(strcmp(tokens[p].str,reg_name(i,1))==0)
+          {
+            return reg_b(i);  //8
+          }
+
+
+        }
+      }
+
+      printf("Wrong register!\n");
+      return 0;
+    }
+  }
+  else if(check_parenthese(p,q)==1)
+  {
+    return eval(p+1,q-1);
+  }
+  else 
+  {
+    if(check_parenthese(p,q)<0)
+    {
+      printf("unmatch parentheses\n");
+      assert(0);
+      return 0;
+    }
+
+    int op = find_dominant_operator(p,q);
+
+    switch ((tokens[op].type))
+    {
+    case TK_NOT:
+      uint32_t res = eval(p+1,q);
+      if(res ==0)
+        return 1;
+      else return 0;
+    
+    default:
+      break;
+    }
+
+    uint32_t val1 = eval(p,op-1);
+    uint32_t val2 = eval(op+1,q);
+
+    switch (tokens[op].type)
+    {
+      case TK_ADD: return val1 + val2;
+      case TK_SUB: return val1 - val2;
+      case TK_MUL: return val1 * val2;
+      case TK_DIV:
+        if(val2 == 0)
+        {
+          printf("Division by zero\n");
+          return 0;
+        }
+        return val1 / val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+      case TK_AND: return val1 && val2;
+      case TK_OR: return val1 || val2;
+      default:
+        printf("unsupported operator\n");
+        assort(0);
+        return 0;
+    }
+
+
+
+  }
+
+}
+
 
