@@ -490,7 +490,7 @@ uint32_t eval(int p,int q)
         //return 1;
       //else return 0;
 
-      return ~eval(p+1,q);
+      return !eval(p+1,q);
     
     default:
       break;
