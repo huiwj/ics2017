@@ -26,7 +26,8 @@ enum {
   TK_ADD,
   TK_SUB,
   TK_MUL,
-  TK_DIV
+  TK_DIV,
+  TK_NEG //负号
 
   /* TODO: Add more token types */
 
@@ -260,7 +261,18 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  //TODO();
+
+  for (int i=0;i<nr_token;i++)
+  {
+    //单目运算符 负号
+    if(tokens[i].type == TK_SUB && (i==0 || tokens[i-1].type == TK_ADD || tokens[i-1].type == TK_SUB ||tokens[i-1].type == TK_MUL
+        ||tokens[i-1].type == TK_DIV || tokens[i-1].type == TK_LEFT ||tokens[i-1].type == TK_RIGHT ||tokens[i-1].type == TK_EQ
+        || tokens[i-1].type == TK_NEQ || tokens[i-1].type == TK_AND || tokens[i-1].type == TK_OR || tokens[i-1].type == TK_NOT))
+        {
+          tokens[i].type = TK_NEG;
+        }
+  }
 
   return 0;
 }
@@ -332,6 +344,7 @@ int get_precedence(int type) //优先级匹配
   case TK_NOT:
   case TK_LEFT:
   case TK_RIGHT:
+  case TK_NEG:
     return 6;
   default:
     return -1;
@@ -343,6 +356,7 @@ bool is_right(int type) //判断是否是右结合
   switch (type)
   {
   case TK_NOT:
+  case TK_NEG:
     return true;
   
   default:
@@ -491,6 +505,8 @@ uint32_t eval(int p,int q)
       //else return 0;
 
       return !eval(p+1,q);
+    case TK_NEG:
+      return -eval(p+1,q);
     
     default:
       break;
