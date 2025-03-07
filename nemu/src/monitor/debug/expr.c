@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <regex.h>
 #include <string.h>
+#include <stdio.h>
 
 enum {
   TK_NOTYPE = 256, //空白
@@ -427,7 +428,7 @@ uint32_t eval(int p,int q)
     else if (tokens[p].type == TK_HEX)  //解析十六进制数
     {
       int value = 0;
-      ssacnf(tokens[p].str,"%x",&value);
+      sscanf(tokens[p].str,"%x",&value);
       return value;
     }
     else if (tokens[p].type == TK_REG)
@@ -484,10 +485,12 @@ uint32_t eval(int p,int q)
     switch ((tokens[op].type))
     {
     case TK_NOT:
-      uint32_t res = eval(p+1,q);
-      if(res ==0)
-        return 1;
-      else return 0;
+      //bool res_val = eval(p+1,q);
+      //if(res_val == 0)
+        //return 1;
+      //else return 0;
+
+      return ~eval(p+1,q);
     
     default:
       break;
@@ -514,13 +517,14 @@ uint32_t eval(int p,int q)
       case TK_OR: return val1 || val2;
       default:
         printf("unsupported operator\n");
-        assort(0);
+       // assort(0);
         return 0;
     }
 
 
 
   }
+  return 0;
 
 }
 
