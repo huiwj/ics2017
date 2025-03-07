@@ -58,7 +58,7 @@ static int cmd_info(char *args)
   {
     for(int i=0;i<8;i++)
     {
-      printf("%s:0x%08x\t",reg_name(i,4),reg_l(i));
+      printf("%s:0x%08x\n",reg_name(i,4),reg_l(i));
     }
   }
   else if (strcmp(args,"w")==0)
