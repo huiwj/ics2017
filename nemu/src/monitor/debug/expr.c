@@ -259,7 +259,6 @@ static bool make_token(char *e) {
 int check_parenthese(int p ,int q)
 {
   int left = 0; //括号匹配
-  int is_closed = false; //最外层括号
   int flag =0;
 
   if(tokens[p].type==TK_LEFT&&tokens[q].type ==TK_RIGHT)
@@ -288,15 +287,14 @@ int check_parenthese(int p ,int q)
     if(left == 0 && i!=q) //最外层不匹配
     {
       flag = 0;
-      is_closed = false;
     }
   }
 
-  if(left == 0 && flag == 1 && is_closed == 1) //最外层成功匹配
+  if(left == 0 && flag == 1) //最外层成功匹配
   {
     return 1;
   }
-  else if(left == 0 && flag == 0)
+  else if(left == 0)
   {
     return 0; //内层匹配
   }
