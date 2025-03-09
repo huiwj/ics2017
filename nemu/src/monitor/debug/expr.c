@@ -485,7 +485,7 @@ uint32_t eval(int p,int q)
 
       return !eval(p+1,q);
     case TK_NEG:
-      return -eval(p+1,q);
+      return (int32_t)-eval(p+1,q);
     
     case TK_DEREF:
       return vaddr_read(eval(p+1,q),4);
