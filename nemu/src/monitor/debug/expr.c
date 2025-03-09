@@ -428,7 +428,12 @@ uint32_t eval(int p,int q)
     {
       int length = strlen(tokens[p].str);
       printf("reg name length : %d\n",length);
-      
+
+      if(strcmp(tokens[p].str,"$eip")==0)
+      {
+        return cpu.eip; //特殊处理
+      }
+
       if (strlen(tokens[p].str)==3)
       {
         printf("reg len is 3\n");
@@ -437,10 +442,7 @@ uint32_t eval(int p,int q)
           return reg_l(i); //32位寄存器
         }
 
-        if(strcmp(tokens[p].str,"eip")==0)
-        {
-          return cpu.eip; //特殊处理
-        }
+        
       }
       else if(strlen(tokens[p].str)==2)
       {
