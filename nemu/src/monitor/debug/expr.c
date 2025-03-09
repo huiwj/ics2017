@@ -426,6 +426,9 @@ uint32_t eval(int p,int q)
     }
     else if (tokens[p].type == TK_REG)
     {
+      int length = strlen(tokens[p].str);
+      printf("reg name length : %d\n",length);
+      
       if (strlen(tokens[p].str)==3)
       {
         printf("reg len is 3\n");
