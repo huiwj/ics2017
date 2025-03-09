@@ -431,6 +431,7 @@ uint32_t eval(int p,int q)
 
       if(strcmp(tokens[p].str,"$eip")==0)
       {
+        printf("match eip\n");
         return cpu.eip; //特殊处理
       }
 
