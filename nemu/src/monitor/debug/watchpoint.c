@@ -71,7 +71,7 @@ void free_wp(WP *wp)
 
 void add_point(char *args)
 {
-  bool success = false;
+  bool success = true;
   WP *wp = new_wp();
   strncpy(wp->expr,args,127);
   wp->expr[127]=0;
