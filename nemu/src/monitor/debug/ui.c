@@ -127,6 +127,24 @@ static int cmd_p (char *args)
   
 }
 
+static int cmd_d(char *args)
+{
+  remove_point(atoi(args));
+  return 0;
+}
+
+static int cmd_w(char *args)
+{
+  if(args == NULL)
+  {
+    printf("no expr\n");
+    return 0;
+  }
+
+  add_point(args);
+  return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -139,6 +157,8 @@ static struct {
   { "info", "DIsplay information",cmd_info },
   { "x", "Examine memory", cmd_x },
   { "p", "Print the value of an experssion", cmd_p},
+  { "w", "Set a watchpoint for an expression", cmd_w},
+  { "d", "Delete a watchpoint by number", cmd_d}
 
   /* TODO: Add more commands */
 
