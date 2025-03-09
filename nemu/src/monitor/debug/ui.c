@@ -98,7 +98,7 @@ static int cmd_x(char *args)
   }
 
   //输出连续n个字节块
-  printf("Start addr:0x%x:\n  ",start_addr);
+  printf("Start addr:0x%x:\n",start_addr);
   for(int i =0;i<n;i++)
   {
     uint32_t data = vaddr_read(start_addr+i*4,4);
