@@ -84,7 +84,7 @@ void add_point(char *args)
 void check_point()
 {
   WP *wp = head;
-  bool success = false ;
+  bool success = true ;
 
   while (wp!=NULL)
   {
