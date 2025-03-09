@@ -30,7 +30,7 @@ void print_watchpoints()
 }
 
 //申请空闲监视点
-WP* mew_wp()
+WP* new_wp()
 {
   assert(free_ !=NULL);
 
