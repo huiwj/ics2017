@@ -485,6 +485,7 @@ uint32_t eval(int p,int q)
 
       return !eval(p+1,q);
     case TK_NEG:
+      printf("识别到负号\n");
       return (int32_t)-eval(p+1,q);
     
     case TK_DEREF:
