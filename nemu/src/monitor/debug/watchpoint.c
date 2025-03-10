@@ -1,5 +1,6 @@
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
+#include "monitor/monitor.h"
 
 #define NR_WP 32
 
@@ -103,6 +104,7 @@ void check_point()
       printf("触发监视点 #%d:%s\n",wp->NO,wp->expr);
       printf("旧值 = %u, 新值 = %u\n",wp->value,new_value);
       wp->value = new_value;
+      nemu_state = NEMU_STOP;
       
     }
     wp=wp->next;
