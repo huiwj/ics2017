@@ -38,9 +38,19 @@ static inline make_DopHelper(SI) {
    *
    op->simm = ???
    */
-  TODO();
+  //TODO();
+  uint32_t raw_value = instr_fetch(eip, op->width);
 
-  rtl_li(&op->val, op->simm);
+  if(op->width == 1)//有符号，扩展32位
+  {
+    op->simm = (int32_t)(int8_t)raw_value;
+  }
+  else if(op->width == 4)//无符号
+  {
+    op->simm = (int32_t)raw_value;
+  }
+
+  rtl_li(&op->val, op->simm);//加载操作数值字段
 
 #ifdef DEBUG
   snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
