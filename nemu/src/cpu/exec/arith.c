@@ -6,8 +6,23 @@ make_EHelper(add) {
   print_asm_template2(add);
 }
 
-make_EHelper(sub) {
-  TODO();
+make_EHelper(sub) { //dest = dest-src
+  //TODO();
+  rtl_sub(&t2,&id_dest->val,&id_src->val);//dest-src
+  operand_write(id_dest,&t2);
+
+  //无符号借位
+  rtl_update_ZFSF(&t2,id_dest->width);
+
+  rtl_sltu(&t0,&id_dest->val,&t2);//t0=(dest<res)?1:0
+  rtl_set_CF(&t0);
+
+  //有符号溢出
+  rtl_xor(&t0,&id_dest->val,&id_src->val);//t0=dest^src
+  rtl_xor(&t1,&id_dest->val,&t2);//t1=dest^res
+  rtl_and(&t0,&t0,&t1);//t0=t0 & t1
+  rtl_msb(&t0,&t0,id_dest->width);//取最高位
+  rtl_set_OF(&t0);
 
   print_asm_template2(sub);
 }
@@ -59,19 +74,20 @@ make_EHelper(adc) {
   print_asm_template2(adc);
 }
 
-make_EHelper(sbb) {
-  rtl_sub(&t2, &id_dest->val, &id_src->val);
-  rtl_sltu(&t3, &id_dest->val, &t2);
-  rtl_get_CF(&t1);
-  rtl_sub(&t2, &t2, &t1);
-  operand_write(id_dest, &t2);
+make_EHelper(sbb) {  //dest = dest-src-CF
+  rtl_sub(&t2, &id_dest->val, &id_src->val);//t2=dest-src
+  rtl_sltu(&t3, &id_dest->val, &t2);//t3=(dest<t2)?1:0  检测无符号溢出
+  rtl_get_CF(&t1);//借位标志
+  rtl_sub(&t2, &t2, &t1);//减去借位 t2=t2-t1
+  operand_write(id_dest, &t2);//结果写入目标操作数
 
+//更新标志位
   rtl_update_ZFSF(&t2, id_dest->width);
 
   rtl_sltu(&t0, &id_dest->val, &t2);
   rtl_or(&t0, &t3, &t0);
   rtl_set_CF(&t0);
-
+//溢出标志
   rtl_xor(&t0, &id_dest->val, &id_src->val);
   rtl_xor(&t1, &id_dest->val, &t2);
   rtl_and(&t0, &t0, &t1);
