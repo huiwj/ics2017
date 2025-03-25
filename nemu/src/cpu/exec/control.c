@@ -44,7 +44,14 @@ make_EHelper(ret) {
 }
 
 make_EHelper(call_rm) {
-  TODO();
+  //TODO();
+  //计算返回地址
+  rtl_li(&t0,decoding.seq_eip);
+  rtl_push(&t0);//压入返回地址
+
+  //跳转到目标地址
+  decoding.jmp_eip = id_dest->val;
+  decoding.is_jmp = 1; 
 
   print_asm("call *%s", id_dest->str);
 }
