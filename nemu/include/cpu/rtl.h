@@ -198,8 +198,10 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
 static inline void rtl_update_SF(const rtlreg_t* result, int width) {
   // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
   //TODO();
-  rtlreg_t mask =1ULL << (width *8 -1);
-  cpu.SF = ((*result & mask)!=0)?1:0;
+  //rtlreg_t mask =1ULL << (width *8 -1);
+  //cpu.SF = ((*result & mask)!=0)?1:0;
+  rtl_msb(&t0,result,width);
+  cpu.SF = t0;
 }
 
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width) {
