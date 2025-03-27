@@ -157,7 +157,7 @@ void difftest_step(uint32_t eip) {
     if(r.array[i]!=reg_l(i))
     {
       diff = true;
-      printf("%s\tnemu:0x%08x\tnume:0x%08x\n",
+      printf("%s\tnemu:0x%08x\tqemu:0x%08x\n",
           reg_name(i,4),reg_l(i),r.array[i]);
     }
   }
