@@ -163,6 +163,7 @@ void difftest_step(uint32_t eip) {
   }
 
   //比较EIP
+ 
   if(r.eip!=cpu.eip)
   {
     diff = true;

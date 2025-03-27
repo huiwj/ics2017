@@ -249,6 +249,7 @@ void exec_wrapper(bool print_flag) {
   update_eip();
 
 #ifdef DIFF_TEST
+  update_eip();
   void difftest_step(uint32_t);
   difftest_step(eip);
 #endif
