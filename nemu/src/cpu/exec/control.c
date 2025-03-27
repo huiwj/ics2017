@@ -5,7 +5,7 @@ make_EHelper(jmp) {
   decoding.is_jmp = 1;
 
   print_asm("jmp %x", decoding.jmp_eip);
-  printf("before jump : EIP = %x,JMP_EIP = %x\n",cpu.eip,decoding.jmp_eip);
+  printf("[jump] : EIP = %x,JMP_EIP = %x\n",cpu.eip,decoding.jmp_eip);
 }
 
 make_EHelper(jcc) {
