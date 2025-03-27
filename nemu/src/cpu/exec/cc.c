@@ -21,7 +21,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
-      
+      printf("CC_O");
       break;
     case CC_B:
        if(cpu.CF)
@@ -30,6 +30,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
+      printf("CC_B");
       break;
     case CC_E:
        if(cpu.ZF)
@@ -38,6 +39,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
+      printf("CC_E");
       break;
     case CC_BE:
        if(cpu.CF||cpu.ZF)
@@ -46,6 +48,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
+      printf("CC_BE");
       break;
     case CC_S:
        if(cpu.SF)
@@ -54,6 +57,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
+      printf("CC_S");
       break;
     case CC_L:
        if(cpu.OF!=cpu.SF||cpu.ZF)
@@ -62,9 +66,11 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
+      printf("CC_L");
       break;
     case CC_LE:
       *dest = cpu.ZF==1||(cpu.SF!=cpu.OF);
+      printf("CC_LE");
       break;
     default: panic("should not reach here");
     case CC_P: panic("n86 does not have PF");
