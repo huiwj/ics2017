@@ -78,8 +78,8 @@ make_EHelper(inc) { //dest = dest + 1
   //of在正数变负数时溢出
 
   //有符号溢出
-  rtl_msb(&t0,&id_dest->val,&id_dest->width);
-  rtl_msb(&t1,&t2,&id_dest->width);
+  rtl_msb(&t0,&id_dest->val,id_dest->width);
+  rtl_msb(&t1,&t2,id_dest->width);
   rtl_xor(&t0,&t0,&t1);
   rtl_set_OF(&t0);
 
@@ -98,8 +98,8 @@ make_EHelper(dec) {
   //of在正数变负数时溢出
 
   //有符号溢出
-  rtl_msb(&t0,&id_dest->val,&id_dest->width);//原符号位
-  rtl_msb(&t1,&t2,&id_dest->width);//计算后符号位
+  rtl_msb(&t0,&id_dest->val,id_dest->width);//原符号位
+  rtl_msb(&t1,&t2,id_dest->width);//计算后符号位
   rtl_xor(&t0,&t0,&t1);//符号位是否变化
   rtl_set_OF(&t0);
 
@@ -114,7 +114,7 @@ make_EHelper(neg) {
 
   rtl_update_ZFSF(&t2,id_dest->width);
 
-  rtl_neq0(&t0,id_dest->val);
+  rtl_neq0(&t0,&id_dest->val);
   rtl_set_CF(&t0);
 
   rtl_eqi(&t0,&id_dest->val,0x80000000);

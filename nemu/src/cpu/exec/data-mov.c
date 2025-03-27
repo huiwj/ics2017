@@ -48,7 +48,7 @@ make_EHelper(popa) {
   rtl_pop(&cpu.ebx);
   rtl_pop(&cpu.edx);
   rtl_pop(&cpu.ecx);
-  rtl_pop(&cpu.eac);
+  rtl_pop(&cpu.eax);
 
   print_asm("popa");
 }
