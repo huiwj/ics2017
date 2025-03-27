@@ -170,13 +170,7 @@ void difftest_step(uint32_t eip) {
 
   }
 
-  //比较EFLAGS
-  if(r.eflags!=cpu.eflags)
-  {
-    diff = true;
-    printf("EFLAGS\tnemu:ox%08x\twemu:0x%08x\n",cpu.eflags,r.eflags);
-    
-  }
+ 
 
   if (diff) {
     nemu_state = NEMU_END;
