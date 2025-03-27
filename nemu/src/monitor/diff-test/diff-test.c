@@ -157,14 +157,19 @@ void difftest_step(uint32_t eip) {
     if(r.array[i]!=reg_l(i))
     {
       diff = true;
-      printf("%s\tnemu:0x%08x\tqume:0x%08x\n",
+      printf("%s\tnemu:0x%08x\tnume:0x%08x\n",
           reg_name(i,4),reg_l(i),r.array[i]);
     }
   }
 
   //比较EIP
  
- 
+  if(r.eip!=cpu.eip)
+  {
+    diff = true;
+    printf("EIP\tnemu:0x%08x\tnemu:0x%08x\n",cpu.eip,r.eip);
+
+  }
 
  
 
