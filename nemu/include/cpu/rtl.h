@@ -189,8 +189,9 @@ static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
 static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
   //TODO();
-  rtlreg_t mask =1ULL << (width *8 -1);
-  cpu.ZF = ((*result & mask)==0)?1:0;
+  //rtlreg_t mask =1ULL << (width *8 -1);
+  //cpu.ZF = ((*result & mask)==0)?1:0;
+  cpu.ZF = ((~0>>(32-width*8))&*result)==0;
 }
 
 //符号标志
