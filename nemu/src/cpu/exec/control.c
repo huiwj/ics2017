@@ -27,15 +27,19 @@ make_EHelper(jmp_rm) {
 make_EHelper(call) {
   // the target address is calculated at the decode stage
   //TODO();
+   printf("[Call] before:EIP=0x%08x,ESP=0x%08x\n)",decoding.seq_eip,cpu.esp);
   rtl_li(&t2, decoding.seq_eip);
+  rtlreg_t ret_eip = decoding.seq_eip;
 
   rtl_push(&t2);
 
   decoding.is_jmp = 1;
 
   print_asm("call %x", decoding.jmp_eip);
+   printf("[Call] after:pushing ret = 0x%08x,new ESP=0x%08x,target=0x%08x\n",
+      ret_eip,cpu.esp,decoding.jmp_eip);
 
-  printf("Call: pushing return address %x onto stack\n",t2);
+ 
 }
 
 make_EHelper(ret) {
@@ -44,7 +48,8 @@ make_EHelper(ret) {
   decoding.jmp_eip=t0;
   decoding.is_jmp=1;
   print_asm("ret");
-  printf("Ret: popped return address %x onto stack\n",t0);
+  printf("[Ret] pop ret=0x%08x,new EIP=0x%08x,new ESP=0x%08x\n",
+      t0,decoding.jmp_eip,cpu.eip);
 }
 
 make_EHelper(call_rm) {
