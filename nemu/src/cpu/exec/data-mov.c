@@ -111,3 +111,93 @@ make_EHelper(lea) {
   operand_write(id_dest, &t2);
   print_asm_template2(lea);
 }
+/*
+(nemu) si
+  100000:   bd 00 00 00 00                        movl $0x0,%ebp
+(nemu) si
+  100005:   bc 00 7c 00 00                        movl $0x7c00,%esp
+(nemu) si
+[Call] before:EIP=0x0010000f,ESP=0x00007c00
+)[Call] after:pushing ret = 0x0010000f,new ESP=0x00007bfc,target=0x0010001c
+  10000a:   e8 0d 00 00 00                        call 10001c
+(nemu) si
+push:esp: esp=0x00007bf8,val=0x00000000
+  10001c:   55                                    pushl %ebp
+(nemu) si
+  10001d:   89 e5                                 movl %esp,%ebp
+(nemu) si
+  10001f:   83 ec 08                              subl $0x8,%esp
+(nemu) si
+[Call] before:EIP=0x00100027,ESP=0x00007bf0
+)[Call] after:pushing ret = 0x00100027,new ESP=0x00007bec,target=0x00100054
+  100022:   e8 2d 00 00 00                        call 100054
+(nemu) si
+  100054:   8d 4c 24 04                           leal 0x4(%esp),%ecx
+(nemu) si
+  100058:   83 e4 f0                              andl $0xfffffff0,%esp
+(nemu) si
+push:esp: esp=0x00007bdc,val=0x00100027
+  10005b:   ff 71 fc                              pushl -0x4(%ecx)
+(nemu) si
+push:esp: esp=0x00007bd8,val=0x00007bf8
+  10005e:   55                                    pushl %ebp
+(nemu) si
+  10005f:   89 e5                                 movl %esp,%ebp
+(nemu) si
+push:esp: esp=0x00007bd4,val=0x586667b1
+  100061:   57                                    pushl %edi
+(nemu) si
+push:esp: esp=0x00007bd0,val=0x46340154
+  100062:   56                                    pushl %esi
+(nemu) si
+push:esp: esp=0x00007bcc,val=0x3726bb7b
+  100063:   53                                    pushl %ebx
+(nemu) si
+push:esp: esp=0x00007bc8,val=0x00007bf0
+  100064:   51                                    pushl %ecx
+(nemu) si
+  100065:   83 ec 08                              subl $0x8,%esp
+(nemu) si
+  100068:   31 ff                                 xorl %edi,%edi
+(nemu) si
+  10006a:   66 90                                 nop
+(nemu) si
+  10006c:   8d 34 3f                              leal (%edi,%edi,1),%esi
+(nemu) si
+  10006f:   31 db                                 xorl %ebx,%ebx
+(nemu) si
+  100071:   8d 76 00                              leal 0(%esi),%esi
+(nemu) si
+  100074:   83 ec 0c                              subl $0xc,%esp
+(nemu) si
+  100077:   8b 87 e0 01 10 00                     movl 0x1001e0(%edi),%eax
+(nemu) si
+  10007d:   03 83 e0 01 10 00                     addl 0x1001e0(%ebx),%eax
+(nemu) si
+  100083:   3b 84 b3 e0 00 10 00                  cmpl 0x1000e0(%ebx,%esi,4),%eax
+(nemu) si
+  10008a:   0f 94 c0                              sete %al
+(nemu) si
+  10008d:   0f b6 c0                              movzxl %al,%al
+(nemu) si
+push:esp: esp=0x00007bb0,val=0x00000001
+  100090:   50                                    pushl %eax
+(nemu) si
+[Call] before:EIP=0x00100096,ESP=0x00007bb0
+)[Call] after:pushing ret = 0x00100096,new ESP=0x00007bac,target=0x0010002c
+  100091:   e8 96 ff ff ff                        call 10002c
+(nemu) si
+push:esp: esp=0x00007ba8,val=0x00007bd8
+  10002c:   55                                    pushl %ebp
+(nemu) si
+  10002d:   89 e5                                 movl %esp,%ebp
+(nemu) si
+  10002f:   8b 45 08                              movl 0x8(%ebp),%eax
+(nemu) si
+  100032:   85 c0                                 testl %eax,%eax
+(nemu) si
+[jcc] ZF=1,taken=1,target=0x00100038
+  100034:   74 02                                 je 100038
+EIP     nemu:0x00100038 nemu:0x00100036
+(nemu) si
+ */
