@@ -30,10 +30,10 @@ make_EHelper(call) {
   // the target address is calculated at the decode stage
   //TODO();
    printf("[Call] before:EIP=0x%08x,ESP=0x%08x\n)",decoding.seq_eip,cpu.esp);
-  rtl_li(&t2, decoding.seq_eip);
-  rtlreg_t ret_eip = decoding.seq_eip;
 
-  rtl_push(&t2);
+  rtlreg_t ret_eip = decoding.seq_eip;
+  t0 = *eip;
+  rtl_push(&t0);
 
   decoding.is_jmp = 1;
 
