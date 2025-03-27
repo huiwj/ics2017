@@ -164,12 +164,7 @@ void difftest_step(uint32_t eip) {
 
   //比较EIP
  
-  if(r.eip!=cpu.eip)
-  {
-    diff = true;
-    printf("EIP\tnemu:0x%08x\tnemu:0x%08x\n",cpu.eip,r.eip);
-
-  }
+ 
 
  
 
