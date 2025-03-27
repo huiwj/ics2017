@@ -31,15 +31,13 @@ make_EHelper(call) {
   //TODO();
    printf("[Call] before:EIP=0x%08x,ESP=0x%08x\n)",decoding.seq_eip,cpu.esp);
 
-  rtlreg_t ret_eip = decoding.seq_eip;
   t0 = *eip;
   rtl_push(&t0);
 
   decoding.is_jmp = 1;
 
   print_asm("call %x", decoding.jmp_eip);
-   printf("[Call] after:pushing ret = 0x%08x,new ESP=0x%08x,target=0x%08x\n",
-      ret_eip,cpu.esp,decoding.jmp_eip);
+  
 
  
 }
