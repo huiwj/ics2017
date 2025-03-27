@@ -149,7 +149,34 @@ void difftest_step(uint32_t eip) {
 
   // TODO: Check the registers state with QEMU.
   // Set `diff` as `true` if they are not the same.
-  TODO();
+  //TODO();
+
+  //比对所有通用寄存器
+  for(int i=0;i<8;i++)
+  {
+    if(r.array[i]!=reg_l(i))
+    {
+      diff = true;
+      printf("%s\tnemu:0x%08x\tqume:0x%08x\n",
+          reg_name(i,4),reg_l(i),r.array[i]);
+    }
+  }
+
+  //比较EIP
+  if(r.eip!=cpu.eip)
+  {
+    diff = true;
+    printf("EIP\tnemu:ox%08x\twemu:0x%08x\n",cpu.eip,r.eip);
+
+  }
+
+  //比较EFLAGS
+  if(r.eflags!=cpu.eflags)
+  {
+    diff = true;
+    printf("EFLAGS\tnemu:ox%08x\twemu:0x%08x\n",cpu.eflags,r.eflags);
+    
+  }
 
   if (diff) {
     nemu_state = NEMU_END;
