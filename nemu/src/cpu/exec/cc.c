@@ -39,7 +39,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       {
         *dest = 0;
       }
-      printf("CC_E");
+      printf("CC_E:%d\n",*dest);
       break;
     case CC_BE:
        if(cpu.CF||cpu.ZF)
