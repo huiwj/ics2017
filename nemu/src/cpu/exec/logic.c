@@ -93,3 +93,25 @@ make_EHelper(not) {
 
   print_asm_template1(not);
 }
+
+make_EHelper(ror) //右循环移位
+{
+  uint32_t shamt = id_src->val & 0x1f; //只取低五位，避免超限
+  t0 = id_dest->val;
+  t0 = (t0>>shamt) | (t0<<((id_dest->width*8)-shamt));
+  operand_write(id_dest,&t0);
+
+  rtl_update_ZFSF(&t0,id_dest->width);
+  print_asm_template2(ror);
+}
+
+make_EHelper(rol) //左循环移位
+{
+  uint32_t shamt = id_src->val & 0x1f;
+  t0 = id_dest->val;
+  t0 = (t0<<shamt) | (t0>>((id_dest->width*8)-shamt));
+  operand_write(id_dest,&t0);
+
+  rtl_update_ZFSF(&t0,id_dest->width);
+  print_asm_template2(rol);
+}
