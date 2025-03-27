@@ -46,8 +46,7 @@ make_EHelper(call) {
 
 make_EHelper(ret) {
   //TODO();
-  rtl_pop(&t0);
-  decoding.jmp_eip=t0;
+  rtl_pop(&decoding.jmp_eip);
   decoding.is_jmp=1;
   print_asm("ret");
   printf("[Ret] pop ret=0x%08x,new EIP=0x%08x,new ESP=0x%08x\n",
@@ -57,8 +56,8 @@ make_EHelper(ret) {
 make_EHelper(call_rm) {
   //TODO();
   //计算返回地址
-  rtl_li(&t0,decoding.seq_eip);
-  rtl_push(&t0);//压入返回地址
+
+  rtl_push(eip);//压入返回地址
 
   //跳转到目标地址
   decoding.jmp_eip = id_dest->val;
