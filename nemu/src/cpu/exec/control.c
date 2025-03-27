@@ -5,6 +5,7 @@ make_EHelper(jmp) {
   decoding.is_jmp = 1;
 
   print_asm("jmp %x", decoding.jmp_eip);
+  printf("before jump : EIP = %x,JMP_EIP = %x\n",cpu.eip,decoding.jmp_eip);
 }
 
 make_EHelper(jcc) {
@@ -33,6 +34,8 @@ make_EHelper(call) {
   decoding.is_jmp = 1;
 
   print_asm("call %x", decoding.jmp_eip);
+
+  printf("Call: pushing return address %x onto stack\n",t2);
 }
 
 make_EHelper(ret) {
@@ -41,6 +44,7 @@ make_EHelper(ret) {
   decoding.jmp_eip=t0;
   decoding.is_jmp=1;
   print_asm("ret");
+  printf("Ret: popped return address %x onto stack\n",t0);
 }
 
 make_EHelper(call_rm) {
