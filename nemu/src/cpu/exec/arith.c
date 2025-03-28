@@ -74,7 +74,7 @@ make_EHelper(cmp) {
 
   rtl_xor(&t3,&t1,&t2);
   rtl_xor(&t2,&t0,&t1);
-  rtl_xor(&t3,&t3,&t2);
+  rtl_and(&t3,&t3,&t2);
 
   rtl_set_OF(&t3);
 
