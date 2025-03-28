@@ -53,6 +53,7 @@ make_EHelper(cmp) {
   printf("t0:%d\n",t0);
 
   rtl_update_ZFSF(&t0,id_dest->width);
+  printf("SF:%d\n",cpu.SF);
   //无符号借位
 
   rtl_sltu(&t3,&id_dest->val,&id_src->val);//t0=(dest<src)?1:0
@@ -65,6 +66,7 @@ make_EHelper(cmp) {
   rtl_and(&t0,&t0,&t1);//t0=t0 & t1
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
+  printf("OF:%d\n",cpu.OF);
 
 
 
