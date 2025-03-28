@@ -49,6 +49,7 @@ make_EHelper(cmp) {
   rtl_sext(&t2,&id_src->val,id_src->width);
 
   rtl_sub(&t0,&t1,&t2);//dest-src
+  printf("t0:%d\n",t0);
 
   //无符号借位
 
