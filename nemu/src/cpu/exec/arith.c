@@ -63,7 +63,7 @@ make_EHelper(cmp) {
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
 
-  rtl_update_ZFSF(&t0,id_dest->width);
+  rtl_update_ZFSF(&t0,4);
 
   print_asm_template2(cmp);
 }
