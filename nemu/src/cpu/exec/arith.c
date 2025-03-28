@@ -61,11 +61,24 @@ make_EHelper(cmp) {
 
   //有符号溢出
   rtlreg_t res = t0;
+  /* 
   rtl_xor(&t0,&t1,&t2);//t0=dest^src
   rtl_xor(&t1,&t1,&res);//t1=dest^res
   rtl_and(&t0,&t0,&t1);//t0=t0 & t1
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
+  */
+  rtl_msb(&t1,&t1,id_dest->width);
+  rtl_msb(&t2,&t2,id_dest->width);
+  rtl_msb(&t0,&res,id_dest->width);
+
+  rtl_xor(&t3,&t1,&t2);
+  rtl_xor(&t2,&t0,&t1);
+  rtl_xor(&t3,&t3,&t2);
+
+  rtl_set_OF(&t3);
+
+
   printf("OF:%d\n",cpu.OF);
 
 
