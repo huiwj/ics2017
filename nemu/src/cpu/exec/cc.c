@@ -81,53 +81,53 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
   }
 }
 /*
- 100096:   83 c3 04                              addl $0x4,%ebx
+ [jump] : EIP = 100040,JMP_EIP = 100010
+  100040:   e9 cb ff ff ff                        jmp 100010
 (nemu) info r
-eax:0x00000001
-ecx:0x00007bf0
-edx:0x64f4b578
-ebx:0x00000004
-esp:0x00007bb0
+eax:0x00000000
+ecx:0x00000080
+edx:0x00007bcf
+ebx:0x00007bce
+esp:0x00007bac
 ebp:0x00007bd8
-esi:0x00000000
-edi:0x00000000
+esi:0x1919a4f7
+edi:0x3c5bb40c
 (nemu) si
-zf:0
-  100099:   83 c4 10                              addl $0x10,%esp
+push:esp: esp=0x00007ba8,val=0x00007bd8
+  100010:   55                                    pushl %ebp
 (nemu) info r
-eax:0x00000001
-ecx:0x00007bf0
-edx:0x64f4b578
-ebx:0x00000004
-esp:0x00007bc0
+eax:0x00000000
+ecx:0x00000080
+edx:0x00007bcf
+ebx:0x00007bce
+esp:0x00007ba8
 ebp:0x00007bd8
-esi:0x00000000
-edi:0x00000000
+esi:0x1919a4f7
+edi:0x3c5bb40c
 (nemu) si
-zf:1
-  10009c:   83 fb 20                              cmpl $0x20,%ebx
+  100011:   89 e5                                 movl %esp,%ebp
 (nemu) info r
-eax:0x00000001
-ecx:0x00007bf0
-edx:0x64f4b578
-ebx:0x00000004
-esp:0x00007bc0
-ebp:0x00007bd8
-esi:0x00000000
-edi:0x00000000
+eax:0x00000000
+ecx:0x00000080
+edx:0x00007bcf
+ebx:0x00007bce
+esp:0x00007ba8
+ebp:0x00007ba8
+esi:0x1919a4f7
+edi:0x3c5bb40c
 (nemu) si
-subcode:5
-CC_E:1
-[jcc] ZF=1,taken=0,target=0x00100074
-  10009f:   75 d3                                 jne 100074
-EIP     nemu:0x001000a1 nemu:0x00100074
+  100013:   8b 45 08                              movl 0x8(%ebp),%eax
 (nemu) info r
 eax:0x00000001
-ecx:0x00007bf0
-edx:0x64f4b578
-ebx:0x00000004
-esp:0x00007bc0
-ebp:0x00007bd8
-esi:0x00000000
-edi:0x00000000
+ecx:0x00000080
+edx:0x00007bcf
+ebx:0x00007bce
+esp:0x00007ba8
+ebp:0x00007ba8
+esi:0x1919a4f7
+edi:0x3c5bb40c
+(nemu) si
+nemu: HIT BAD TRAP at eip = 0x00100016
+
+  100016:   d6                                    nemu trap (eax = 1)
  */
