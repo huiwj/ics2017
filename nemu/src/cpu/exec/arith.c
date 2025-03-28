@@ -49,6 +49,7 @@ make_EHelper(cmp) {
   rtl_sext(&t2,&id_src->val,4);
 
   rtl_sub(&t0,&t1,&t2);//dest-src
+  rtlreg_t res = t0;
 
   printf("t0:%d\n",t0);
 
@@ -60,7 +61,7 @@ make_EHelper(cmp) {
   rtl_set_CF(&t3);
 
   //有符号溢出
- // rtlreg_t res = t0;
+  
   /* 
   rtl_xor(&t0,&t1,&t2);//t0=dest^src
   rtl_xor(&t1,&t1,&res);//t1=dest^res
@@ -68,15 +69,10 @@ make_EHelper(cmp) {
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
   */
-  rtl_msb(&t1,&id_dest->val,id_dest->width);
-  rtl_msb(&t2,&id_src->val,id_dest->width);
-  rtl_msb(&t0,&t0,id_dest->width);
-
-  rtl_xor(&t3,&t1,&t2);
-  rtl_xor(&t2,&t0,&t1);
-  rtl_and(&t3,&t3,&t2);
-
-  rtl_set_OF(&t3);
+  rtlreg_t destmsb = (id_dest->val >> 31)&1;
+  rtlreg_t srcmsb = (id_src->val >> 31)&1;
+  rtlreg_t resmsb = (res >> 31)&1;
+  cpu.OF = (destmsb!=srcmsb)&&(destmsb!=resmsb);
 
 
   printf("OF:%d\n",cpu.OF);
