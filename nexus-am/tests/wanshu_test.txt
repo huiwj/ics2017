@@ -1,0 +1,37 @@
+[1;34m[src/monitor/monitor.c,65,load_img] The image is /home/hui/ics2017/nexus-am/tests/cputest/build/wanshu-x86-nemu.bin[0m
+Welcome to NEMU!
+[1;34m[src/monitor/monitor.c,30,welcome] Build time: 16:32:08, Mar 28 2025[0m
+
+
+===== the original log.txt =====
+
+[src/monitor/monitor.c,65,load_img] The image is /home/hui/ics2017/nexus-am/tests/cputest/build/wanshu-x86-nemu.bin
+[src/monitor/monitor.c,30,welcome] Build time: 16:32:08, Mar 28 2025
+  100000:   bd 00 00 00 00                        movl $0x0,%ebp
+  100005:   bc 00 7c 00 00                        movl $0x7c00,%esp
+  10000a:   e8 0d 00 00 00                        call 10001c
+  10001c:   55                                    pushl %ebp
+  10001d:   89 e5                                 movl %esp,%ebp
+  10001f:   83 ec 08                              subl $0x8,%esp
+  100022:   e8 21 00 00 00                        call 100048
+  100048:   8d 4c 24 04                           leal 0x4(%esp),%ecx
+  10004c:   83 e4 f0                              andl $0xfffffff0,%esp
+  10004f:   ff 71 fc                              pushl -0x4(%ecx)
+  100052:   55                                    pushl %ebp
+  100053:   89 e5                                 movl %esp,%ebp
+  100055:   57                                    pushl %edi
+  100056:   56                                    pushl %esi
+  100057:   53                                    pushl %ebx
+  100058:   51                                    pushl %ecx
+  100059:   83 ec 08                              subl $0x8,%esp
+  10005c:   bb 01 00 00 00                        movl $0x1,%ebx
+  100061:   31 ff                                 xorl %edi,%edi
+  100063:   90                                    nop
+  100064:   43                                    incl %ebx
+  100065:   83 fb 1e                              cmpl $0x1e,%ebx
+  100068:   74 3d                                 je 1000a7
+  10006a:   b9 01 00 00 00                        movl $0x1,%ecx
+  10006f:   31 f6                                 xorl %esi,%esi
+  100071:   8d 76 00                              leal 0(%esi),%esi
+  100074:   89 d8                                 movl %ebx,%eax
+  100076:   99                                    cltd
