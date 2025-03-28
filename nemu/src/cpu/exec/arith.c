@@ -49,8 +49,10 @@ make_EHelper(cmp) {
   rtl_sext(&t2,&id_src->val,id_src->width);
 
   rtl_sub(&t0,&t1,&t2);//dest-src
+
   printf("t0:%d\n",t0);
 
+  rtl_update_ZFSF(&t0,4);
   //无符号借位
 
   rtl_sltu(&t3,&id_dest->val,&id_src->val);//t0=(dest<src)?1:0
@@ -63,7 +65,7 @@ make_EHelper(cmp) {
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
 
-  rtl_update_ZFSF(&t0,4);
+
 
   print_asm_template2(cmp);
 }
