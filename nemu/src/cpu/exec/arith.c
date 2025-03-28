@@ -68,8 +68,8 @@ make_EHelper(cmp) {
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
   */
-  rtl_msb(&t1,&t1,id_dest->width);
-  rtl_msb(&t2,&t2,id_dest->width);
+  rtl_msb(&t1,&id_dest->val,id_dest->width);
+  rtl_msb(&t2,&id_src->val,id_dest->width);
   rtl_msb(&t0,&t0,id_dest->width);
 
   rtl_xor(&t3,&t1,&t2);
