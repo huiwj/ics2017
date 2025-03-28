@@ -67,12 +67,12 @@ make_EHelper(cltd) {
   if (decoding.is_operand_size_16) {
     //TODO();
     //CWD:ax->dx:ax
-    rtl_sext(&cpu.edx,&cpu.eax,2);
+    cpu.edx = (cpu.eax >> 15)? 0xFFFF : 0x0000;
   }
   else {
     //TODO();
     //CDQ:EAX -> EDX:EAX
-    rtl_sext(&cpu.edx,&cpu.eax,4);
+    cpu.edx = (cpu.eax >> 31 ) ? 0xFFFFFFFF : 0x00000000;
   }
 
   print_asm(decoding.is_operand_size_16 ? "cwtl" : "cltd");
