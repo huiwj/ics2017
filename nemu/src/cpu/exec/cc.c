@@ -60,7 +60,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       printf("CC_S");
       break;
     case CC_L:
-       if(cpu.OF!=cpu.SF||cpu.ZF)
+       if(cpu.OF!=cpu.SF)
         *dest = 1;
       else
       {

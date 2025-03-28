@@ -45,22 +45,23 @@ make_EHelper(sub) { //dest = dest-src
 
 make_EHelper(cmp) {
   //TODO();
-  rtl_sext(&t1,&id_dest->val,id_dest->width);
-  rtl_sext(&t2,&id_src->val,id_src->width);
+  rtl_sext(&t1,&id_dest->val,4);
+  rtl_sext(&t2,&id_src->val,4);
 
   rtl_sub(&t0,&t1,&t2);//dest-src
 
   printf("t0:%d\n",t0);
 
-  rtl_update_ZFSF(&t0,4);
+  rtl_update_ZFSF(&t0,id_dest->width);
   //无符号借位
 
   rtl_sltu(&t3,&id_dest->val,&id_src->val);//t0=(dest<src)?1:0
   rtl_set_CF(&t3);
 
   //有符号溢出
-  rtl_xor(&t0,&id_dest->val,&id_src->val);//t0=dest^src
-  rtl_xor(&t1,&id_dest->val,&t2);//t1=dest^res
+  rtlreg_t res = t0;
+  rtl_xor(&t0,&t1,&t2);//t0=dest^src
+  rtl_xor(&t1,&t1,&res);//t1=dest^res
   rtl_and(&t0,&t0,&t1);//t0=t0 & t1
   rtl_msb(&t0,&t0,id_dest->width);//取最高位
   rtl_set_OF(&t0);
