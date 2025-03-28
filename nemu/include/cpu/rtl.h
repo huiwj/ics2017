@@ -140,7 +140,7 @@ static inline void rtl_not(rtlreg_t* dest) {
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
   //TODO();
-  int shift = (sizeof(rtlreg_t)-width)*8;
+  uint32_t shift = (sizeof(rtlreg_t)-width)*8;
   *dest = (*src1 << shift) >> shift;
 }
 
