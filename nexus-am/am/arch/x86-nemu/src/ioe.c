@@ -8,7 +8,7 @@ void _ioe_init() {
   boot_time = inl(RTC_PORT);
 }
 
-unsigned long _uptime() {
+unsigned long _uptime() { //返回系统启动后毫秒数
   return 0;
 }
 

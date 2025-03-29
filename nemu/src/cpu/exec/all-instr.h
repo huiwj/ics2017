@@ -49,3 +49,5 @@ make_EHelper(shl);
 make_EHelper(rol);
 make_EHelper(ror);
 make_EHelper(jmp_rm);
+make_EHelper(in);
+make_EHelper(out);
