@@ -7,7 +7,7 @@ make_EHelper(test) {
   rtl_update_ZFSF(&t0,id_dest->width);
   rtl_set_CF(&tzero);
   rtl_set_OF(&tzero);
-  printf("[test] ZF=%d,SF=%d\n",cpu.ZF,cpu.SF);
+  //printf("[test] ZF=%d,SF=%d\n",cpu.ZF,cpu.SF);
   print_asm_template2(test);
 }
 
