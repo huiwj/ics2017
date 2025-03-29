@@ -46,9 +46,9 @@ void pio_write(ioaddr_t, int, uint32_t);
 
 make_EHelper(in) {
   //TODO();
-
+  //从src读取端口地址，并读取数值
   rtl_li(&t0,pio_read(id_src->val,id_dest->width));
-
+  //数据写入目标操作数
   operand_write(id_dest,&t0);
 
   print_asm_template2(in);
@@ -60,7 +60,7 @@ make_EHelper(in) {
 
 make_EHelper(out) {
   //TODO();
-
+  //src读取端口地址，从dest读取需要写入的值
   pio_write(id_dest->val,id_dest->width,id_src->val);
 
   print_asm_template2(out);
