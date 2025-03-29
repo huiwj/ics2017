@@ -192,7 +192,7 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   //rtlreg_t mask =1ULL << (width *8 -1);
   //cpu.ZF = ((*result & mask)==0)?1:0;
   cpu.ZF = ((~0>>(32-width*8))&*result)==0;
-  printf("zf:%d\n",cpu.ZF);
+  //printf("zf:%d\n",cpu.ZF);
   
 }
 

@@ -51,10 +51,10 @@ make_EHelper(cmp) {
   rtl_sub(&t0,&t1,&t2);//dest-src
   rtlreg_t res = t0;
 
-  printf("t0:%d\n",t0);
+  //printf("t0:%d\n",t0);
 
   rtl_update_ZFSF(&t0,id_dest->width);
-  printf("SF:%d\n",cpu.SF);
+  //printf("SF:%d\n",cpu.SF);
   //无符号借位
 
   rtl_sltu(&t3,&id_dest->val,&id_src->val);//t0=(dest<src)?1:0
@@ -75,7 +75,7 @@ make_EHelper(cmp) {
   cpu.OF = (destmsb!=srcmsb)&&(destmsb!=resmsb);
 
 
-  printf("OF:%d\n",cpu.OF);
+  //printf("OF:%d\n",cpu.OF);
 
 
 
