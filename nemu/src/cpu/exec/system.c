@@ -57,7 +57,6 @@ make_EHelper(in) {
   diff_test_skip_qemu();
 #endif
 }
-
 make_EHelper(out) {
   //TODO();
   //src读取端口地址，从dest读取需要写入的值
