@@ -1,7 +1,6 @@
 #include "common.h"
 #include "syscall.h"
 
-extern ssize_t fs_write(int fd,const void *buf,size_t len);
 _RegSet* do_syscall(_RegSet *r) {
   uintptr_t a[4];
   a[0] = SYSCALL_ARG1(r);
@@ -17,7 +16,15 @@ _RegSet* do_syscall(_RegSet *r) {
       _halt(SYSCALL_ARG2(r));
       break;
     case SYS_write:
-      SYSCALL_ARG1(r)=fs_write(SYSCALL_ARG2(r),(void*)SYSCALL_ARG3(r),SYSCALL_ARG4(r));
+      if(a[1]==1||a[1]==2)
+      {
+        for(size_t i=0;i<a[3];i++)
+        {
+          _putc(((char *)a[2])[i]);
+        }
+        SYSCALL_ARG1(r)=a[3];
+      }
+      else SYSCALL_ARG1(r)=-1;
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
