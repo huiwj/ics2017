@@ -24,7 +24,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   rtl_push(&cpu.eflags);
   rtl_push(&cpu.CS);
   rtl_push(&ret_addr);
-  printf("raise_intr:NO=0x%x,handler=0x%x\n",NO,handler_addr);
+  //printf("raise_intr:NO=0x%x,handler=0x%x\n",NO,handler_addr);
   //设置跳转指令
   decoding.jmp_eip = handler_addr;
   decoding.is_jmp = 1;
