@@ -22,9 +22,9 @@ _RegSet* do_syscall(_RegSet *r) {
         {
           _putc(((char *)a[2])[i]);
         }
-        SYSCALL_ARG1(r)=a[3];
+        //SYSCALL_ARG1(r)=a[3];
       }
-      //else SYSCALL_ARG1(r)=-1;
+      else SYSCALL_ARG1(r)=-1;
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
