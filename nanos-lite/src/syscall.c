@@ -13,7 +13,7 @@ _RegSet* do_syscall(_RegSet *r) {
       SYSCALL_ARG1(r)=1;
       break;
     case SYS_exit:
-      _halt(SYSCALL_ARG2(r));
+      _halt(a[1]);
       break;
     case SYS_write:
       if(a[1]==1||a[1]==2)
@@ -24,7 +24,7 @@ _RegSet* do_syscall(_RegSet *r) {
         }
         SYSCALL_ARG1(r)=a[3];
       }
-      else SYSCALL_ARG1(r)=-1;
+      //else SYSCALL_ARG1(r)=-1;
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
