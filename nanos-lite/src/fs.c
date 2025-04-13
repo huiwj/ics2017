@@ -23,4 +23,23 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  file_table[FD_FB].size = _screen.width * _screen.height *4;
+}
+
+ssize_t fs_write(int fd,const void *buf,size_t len)
+{
+  //ssize_t size = file_table[fd].size;
+  switch(fd)
+  {
+    case FD_STDOUT:
+    case FD_STDERR:
+      for (int i =0;i<len;i++)
+      {
+        _putc(((char*)buf)[i]);
+      }
+      return len;
+    default:
+      return 0;
+
+  }
 }
