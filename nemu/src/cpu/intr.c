@@ -17,8 +17,8 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   uint32_t low = vaddr_read(idt_entry_addr,4);
   uint32_t high = vaddr_read(idt_entry_addr+4,4);
   //提取offset
-  uint32_t offset_low = low & 0xFFFF;
-  uint32_t offset_high = high&0xFFFF0000;
+  uint32_t offset_low = low & 0x0000FFFF;
+  uint32_t offset_high = high &0xFFFF0000;
   uint32_t handler_addr = offset_high |offset_low;
   //压栈
   cpu.esp -=4;
@@ -29,8 +29,8 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   vaddr_write(cpu.esp,4,ret_addr);
   
   //设置跳转指令
-  cpu.eip = handler_addr;
-  cpu.CS = 8;
+  decoding.jmp_eip = handler_addr;
+  decoding.is_jmp = 1;
 }
 
 void dev_raise_intr() {
