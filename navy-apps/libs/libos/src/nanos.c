@@ -38,11 +38,11 @@ void *_sbrk(intptr_t increment){
   intptr_t new_brk = current_brk + increment;
   //系统调用尝试设置新pb
   int ret = _syscall_(SYS_brk,new_brk,0,0);
-  ir(ret==0)
+  if(ret==0)
   {
     old_brk = current_brk;
     current_brk = new_brk;//更新当前值
-    return old_brk;
+    return (void*)old_brk;
   }
   else
     return (void *)-1;
