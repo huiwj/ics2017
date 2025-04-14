@@ -37,6 +37,7 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
       {
         _putc(((char*)buf)[i]);
       }
+      Log("sys_write:fd %d len %d",fd,len);
       return len;
     default:
       return 0;
