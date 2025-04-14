@@ -32,17 +32,12 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  static void *current_brk = NULL;  //当前program break
-  void *old_brk;
+  static intptr_t current_brk = (intptr_t)&_end;  //当前program break
+  intptr_t old_brk = current_brk;
   //初始化
-  if(current_brk==NULL)
-  {
-    current_brk=&_end;
-  }
-  //计算新的
-  void *new_brk = current_brk + increment;
+  intptr_t new_brk = current_brk + increment;
   //系统调用尝试设置新pb
-  int ret = syscall(SYS_brk,new_brk);
+  int ret = _syscall_(SYS_brk,new_brk,0,0);
   ir(ret==0)
   {
     old_brk = current_brk;
