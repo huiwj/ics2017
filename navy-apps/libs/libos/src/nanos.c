@@ -32,7 +32,6 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  write(1,"IN _sbrk\n",9);
   static intptr_t current_brk = (intptr_t)&_end;  //当前program break
   intptr_t old_brk = current_brk;
   //初始化
@@ -43,9 +42,6 @@ void *_sbrk(intptr_t increment){
   {
     old_brk = current_brk;
     current_brk = new_brk;//更新当前值
-    char buf[128];
-    int len = sprintf(buf,"[_sbrk]old_brl = 0x%p,new_brk=0x%p\n",old_brk,new_brk);
-    write(1,buf,len);
     return old_brk;
   }
   else
