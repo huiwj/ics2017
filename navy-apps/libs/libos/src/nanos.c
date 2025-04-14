@@ -9,6 +9,8 @@
 // TODO: discuss with syscall interface
 #ifndef __ISA_NATIVE__
 
+extern char _end;
+
 // FIXME: this is temporary
 
 int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2){
@@ -30,7 +32,25 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  return (void *)-1;
+  static void *current_brk = NULL;  //当前program break
+  void *old_brk;
+  //初始化
+  if(current_brk==NULL)
+  {
+    current_brk=&_end;
+  }
+  //计算新的
+  void *new_brk = current_brk + increment;
+  //系统调用尝试设置新pb
+  int ret = syscall(SYS_brk,new_brk);
+  ir(ret==0)
+  {
+    old_brk = current_brk;
+    current_brk = new_brk;//更新当前值
+    return old_brk;
+  }
+  else
+    return (void *)-1;
 }
 
 int _read(int fd, void *buf, size_t count) {

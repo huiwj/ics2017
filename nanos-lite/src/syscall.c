@@ -20,6 +20,9 @@ _RegSet* do_syscall(_RegSet *r) {
     case SYS_write:
       SYSCALL_ARG1(r)=fs_write(a[1],(void*)a[2],a[3]);
       break;
+    case SYS_brk:
+      SYSCALL_ARG1(r)=0;
+      break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
