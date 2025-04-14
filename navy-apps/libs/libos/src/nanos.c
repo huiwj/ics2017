@@ -32,6 +32,7 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
+  write(1,"IN _sbrk\n",9);
   static intptr_t current_brk = (intptr_t)&_end;  //当前program break
   intptr_t old_brk = current_brk;
   //初始化
