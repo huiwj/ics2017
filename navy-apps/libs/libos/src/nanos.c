@@ -49,7 +49,7 @@ void *_sbrk(intptr_t increment){
     current_brk = new_brk;//更新当前值
     char buf[128];
     int len = sprintf(buf,"[_sbrk]old_brl = 0x%p,new_brk=0x%p\n",old_brk,new_brk);
-    syscall(SYS_write,2,buf,len);
+    write(1,buf,len);
     return old_brk;
   }
   else
