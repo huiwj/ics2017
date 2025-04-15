@@ -82,6 +82,10 @@ int fs_open(const char *pathname,int flags, int mode)
 
 ssize_t fs_read(int fd,void *buf,size_t len)
 {
+  if(file_table[fd].open_offset + len > file_table[fd].size)
+  {
+    len = file_table[fd].size - file_table[fd].open_offset;
+  }
   if(fd==FD_STDIN || fd == FD_STDOUT || fd == FD_STDERR) return 0;
   if(fd == FD_DISPINFO) //固定内容文件使用偏移读取
   {
