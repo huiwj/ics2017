@@ -2,6 +2,11 @@
 #include "syscall.h"
 
 extern ssize_t fs_write(int fd,const void *buf,size_t len);
+extern int fs_open(const char *pathname,int flags, int mode);
+extern ssize_t fs_read(int fd,void *buf,size_t len);
+extern int fs_close(int fd);
+extern size_t fs_filesz(int fd);
+extern off_t fs_lseek(int fd,off_t offset, int whence);
 
 _RegSet* do_syscall(_RegSet *r) {
   uintptr_t a[4];
@@ -23,7 +28,18 @@ _RegSet* do_syscall(_RegSet *r) {
       break;
     case SYS_write:
       SYSCALL_ARG1(r)=fs_write(a[1],(void*)a[2],a[3]);
-      
+      break;
+    case SYS_lseek:
+      SYSCALL_ARG1(r)=fs_lseek(a[1],a[2],a[3]);
+      break;
+    case SYS_read:
+      SYSCALL_ARG1(r)=fs_read(a[1],(void*)a[2],a[3]);
+      break;
+    case SYS_open:
+      SYSCALL_ARG1(r)=fs_open((char*)a[1],a[2],a[3]);
+      break;
+    case SYS_close:
+      SYSCALL_ARG1(r)=fs_close(a[1]);
       break;
     
     default: panic("Unhandled syscall ID = %d", a[0]);
