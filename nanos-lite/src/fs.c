@@ -68,7 +68,7 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
 
 int fs_open(const char *pathname,int flags, int mode)
 {
-  for(int i=0;i<sizeof(file_table)/sizeof(file_table[0]);i++)
+  for(int i=0;i<NR_FILES;i++)
   {
     if(strcmp(file_table[i].name,pathname)==0)
     {
