@@ -13,8 +13,13 @@ uintptr_t loader(_Protect *as, const char *filename) {
   //TODO();
   //获取大小
   int fd = fs_open(filename,0,0);
+  Log("Info:file '%s' opened successfully, fd = %d",filename,fd);
+
   size_t size = fs_filesz(fd);
+  Log("Info: file size of '%s' is %zu bytes",filename,size);
+
   fs_read(fd,(void*)DEFAULT_ENTRY,size);
+  Log("Info:successfully read %zu bytes from '%s' to 0x%x",size,filename,DEFAULT_ENTRY);
   fs_close(fd);
   
   //size_t ramdisk_size = get_ramdisk_size();
