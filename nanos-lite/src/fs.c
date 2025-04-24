@@ -98,7 +98,7 @@ ssize_t fs_read(int fd,void *buf,size_t len)
   }
   if(fd == FD_EVENTS)//不断产生数据的设备，返回长度由events_read决定
   {
-    return events_read(buf,len);
+    return events_read((void*)buf,len);
   }
   //普通文件
   {
