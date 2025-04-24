@@ -55,10 +55,10 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
       
       return len;
     case FD_FB:
-      //fb_write(buf,file_table[fd].open_offset,len);
-      //file_table[fd].open_offset += len;
-      //return len;
-      return 0;
+      fb_write(buf,file_table[fd].open_offset,len);
+      file_table[fd].open_offset += len;
+      return len;
+      
     default:
       ramdisk_write((void*)buf,file_table[fd].disk_offset + file_table[fd].open_offset,len);
       file_table[fd].open_offset += len;
