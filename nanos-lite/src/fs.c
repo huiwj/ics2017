@@ -37,10 +37,7 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
 {
   ssize_t size = file_table[fd].size;
 
-  if(file_table[fd].open_offset + len > size)
-  {
-    len = size - file_table[fd].open_offset;
-  }
+ 
   switch(fd)
   {
     case FD_STDIN:
@@ -60,6 +57,10 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
       return len;
       
     default:
+       if(file_table[fd].open_offset + len > size)
+        {
+          len = size - file_table[fd].open_offset;
+        }
       ramdisk_write((void*)buf,file_table[fd].disk_offset + file_table[fd].open_offset,len);
       file_table[fd].open_offset += len;
       return len;
