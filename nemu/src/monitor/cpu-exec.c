@@ -30,14 +30,9 @@ void cpu_exec(uint64_t n) {
 
 #ifdef DEBUG
     /* TODO: check watchpoints here. */
+    check_point();
     
-    if(check_wp()){
 
-      nemu_state = NEMU_STOP;
-
-      return;
-
-    }
 #endif
 
 #ifdef HAS_IOE

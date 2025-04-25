@@ -81,9 +81,9 @@ static inline void load_img() {
 
 static inline void restart() {
   /* Set the initial instruction pointer. */
-  cpu.eflags.value=0x00000002;
-  cpu.cs=8;
   cpu.eip = ENTRY_START;
+  cpu.eflags= 2;//设置IF标志位为1
+  cpu.CS =8;
 
 #ifdef DIFF_TEST
   init_qemu_reg();
@@ -116,7 +116,7 @@ int init_monitor(int argc, char *argv[]) {
   init_log();
 
   /* Test the implementation of the `CPU_state' structure. */
-  reg_test();
+  reg_test();//生成随机数据
 
 #ifdef DIFF_TEST
   /* Fork a child process to perform differential testing. */
@@ -124,8 +124,7 @@ int init_monitor(int argc, char *argv[]) {
 #endif
 
   /* Load the image to memory. */
-  load_img();
-  
+  load_img();//读入客户程序镜像
 
   /* Initialize this virtual computer system. */
   restart();
@@ -140,7 +139,7 @@ int init_monitor(int argc, char *argv[]) {
   init_device();
 
   /* Display welcome message. */
-  welcome();
+  welcome();//输出
 
   return is_batch_mode;
 }

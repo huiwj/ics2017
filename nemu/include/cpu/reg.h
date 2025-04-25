@@ -16,58 +16,47 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
 
 typedef struct {
   union{
-  union {
-    uint32_t _32;
-    uint16_t _16;
-    uint8_t _8[2];
-  } gpr[8];
+    union { //通用寄存器
+      uint32_t _32;
+      uint16_t _16;
+      uint8_t _8[2];
+    } gpr[8];
 
   /* Do NOT change the order of the GPRs' definitions. */
 
   /* In NEMU, rtlreg_t is exactly uint32_t. This makes RTL instructions
    * in PA2 able to directly access these registers.
    */
-  struct{
-    uint32_t eax;
-    uint32_t ecx;
-    uint32_t edx;
-    uint32_t ebx;
-    uint32_t esp;
-    uint32_t ebp;
-    uint32_t esi;
-    uint32_t edi;
-    union {
-      struct{
-        uint32_t CF : 1;
-        uint32_t :    5;
-        uint32_t ZF : 1;
-        uint32_t SF : 1;
-        uint32_t :    1;
-
-        uint32_t IF : 1;
-        uint32_t :    1;
-        uint32_t OF : 1;
-        uint32_t :   20;
-        };
-        rtlreg_t value;
-      } eflags;
+   //别名访问
+   struct{
+        rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
     };
   };
-  //rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-  
-  vaddr_t eip;
+  vaddr_t eip; //计数器
+
+  union{
+    struct{
+      uint32_t CF : 1;
+      uint32_t    : 1;
+      uint32_t    : 4;
+      uint32_t ZF : 1;
+      uint32_t SF : 1;
+      uint32_t    : 1;
+      uint32_t IF : 1;
+      uint32_t    : 1;
+      uint32_t OF : 1;
+      uint32_t    : 20;
+    };
+    uint32_t eflags;
+  };
 
   struct{
-    //idtr:32bit base; 16bit limit
-    uint32_t base;
     uint16_t limit;
+    uint32_t base;
   }idtr;
-  
-  uint16_t cs;
 
-  
+  uint32_t CS;
 
-  bool INTR;
 } CPU_state;
 
 extern CPU_state cpu;
