@@ -44,7 +44,7 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
       return 0;
     case FD_STDOUT:
     case FD_STDERR:
-      Log("sys_write:fd %d len %d",fd,len);
+     // Log("sys_write:fd %d len %d",fd,len);
       for (int i =0;i<len;i++)
       {
         _putc(((char*)buf)[i]);
