@@ -149,29 +149,30 @@ void difftest_step(uint32_t eip) {
 
   // TODO: Check the registers state with QEMU.
   // Set `diff` as `true` if they are not the same.
-  //TODO();
+  if (r.eip != cpu.eip || r.eax != cpu.eax || r.ebx != cpu.ebx || r.ecx != cpu.ecx || r.edx != cpu.edx || r.esp != cpu.esp || r.ebp != cpu.ebp || r.esi != cpu.esi || r.edi != cpu.edi){
 
-  //比对所有通用寄存器
-  for(int i=0;i<8;i++)
-  {
-    if(r.array[i]!=reg_l(i))
-    {
-      diff = true;
-      printf("%s\tnemu:0x%08x\tqemu:0x%08x\n",
-          reg_name(i,4),reg_l(i),r.array[i]);
-    }
-  }
-
-  //比较EIP
- 
-  if(r.eip!=cpu.eip)
-  {
     diff = true;
-    printf("EIP\tnemu:0x%08x\tnemu:0x%08x\n",cpu.eip,r.eip);
- 
-  }
+          printf("now eip:0x%08x\n", eip);
 
- 
+	  printf("qemu.eip:0x%08x, nemu.eip:0x%08x\n", r.eip, cpu.eip);
+
+	  printf("qemu.eax:0x%08x, nemu.eax:0x%08x\n", r.eax, cpu.eax);
+
+	  printf("qemu.ebx:0x%08x, nemu.ebx:0x%08x\n", r.ebx, cpu.ebx);
+
+	  printf("qemu.ecx:0x%08x, nemu.ecx:0x%08x\n", r.ecx, cpu.ecx);
+
+	  printf("qemu.edx:0x%08x, nemu.edx:0x%08x\n", r.edx, cpu.edx);
+
+	  printf("qemu.esp:0x%08x, nemu.esp:0x%08x\n", r.esp, cpu.esp);
+
+	  printf("qemu.ebp:0x%08x, nemu.ebp:0x%08x\n", r.ebp, cpu.ebp);
+
+	  printf("qemu.esi:0x%08x, nemu.esi:0x%08x\n", r.esi, cpu.esi);
+
+	  printf("qemu.edi:0x%08x, nemu.edi:0x%08x\n", r.edi, cpu.edi);
+
+ }
 
   if (diff) {
     nemu_state = NEMU_END;

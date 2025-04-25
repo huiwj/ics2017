@@ -2,7 +2,6 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
-#include "memory.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -39,110 +38,135 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-static int cmd_si (char *args)
-{
-  int n=1;
+static int cmd_si(char *args){   
 
-  if (args != NULL)
-  {
-    sscanf(args,"%d",&n);
-  }
+    char *argv = strtok(args," ");
 
-  cpu_exec(n);
-  return 0;
-}
+     //printf("%s\n",argv);
 
-static int cmd_info(char *args)
-{
-  if (strcmp(args,"r")==0)
-  {
-    for(int i=0;i<8;i++)
-    {
-      printf("%s:0x%08x\n",reg_name(i,4),reg_l(i));
+    if(argv == NULL){
+       cpu_exec(1);
+       printf("OK");
+       return 0;
     }
+
+    int num = atoi(argv);
+    cpu_exec(num);
+    printf("OK");
+    return 0;
+
+};
+
+static int cmd_info(char *args){
+   char *argv=strtok(args," ");
+   if (strcmp(argv,"r")==0){
+        for(int i=0;i<8;i++)
+      		printf("%s \t0x%x \t%d\n",regsl[i],cpu.gpr[i]._32,cpu.gpr[i]._32);
+
+      printf("eip \t0x%x \t%d\n",cpu.eip,cpu.eip);
+
   }
-  else if (strcmp(args,"w")==0)
-  {
-    print_watchpoints();
-  }
+  else if(strcmp(argv,"w")==0){
+	print_w();
+}
   return 0;
 }
 
-static int cmd_x(char *args)
-{
-  if(args == NULL)
-  {
-    printf("x N EXPR\n");
-    return 0;
-  }
+static int cmd_x(char *args){
+	if (args == NULL) {
+        printf("Wrong Command!\n");
+        return 0;
+    }
+	int num,exprs;
+	sscanf(args,"%d%x",&num,&exprs);
+	int i;
+	for (i = 0;i < num;i ++){
+		printf("0x%8x\t",exprs + i*4);
+		uint32_t mem=vaddr_read(exprs+i*4,4);
+		for(int j=0;j<4;j++){
+			printf("0x%02x\t",mem&0xff);
+			mem=mem>>8;
+	}
+	printf("\n");
+	}
+	return 0;
+}
 
-  //解析参数
-  int n=1;
-  char expr_ptr[256] = {0};
-  
-  int matched = sscanf(args,"%d %255s",&n ,expr_ptr);
-  if(matched<=0)
-  {
-    printf("wrong N\n");
-    return 0;
-  }
+static int cmd_p(char *args) {
 
-  bool success = true;
-  uint32_t start_addr = expr(expr_ptr,&success) ;
 
-  //计算expr
-  if(!success)
-  {
-    printf("wrong expr\n");
-    return 0;
-  }
+	uint32_t ans;
 
-  //输出连续n个字节块
-  printf("Start addr:0x%x:\n",start_addr);
-  for(int i =0;i<n;i++)
-  {
-    uint32_t data = vaddr_read(start_addr+i*4,4);
-    printf("0x%08x:0x%08x\n",start_addr+i*4,data);
-  }
+	bool flag;
 
-  return 0;
+	ans = expr(args, &flag);
+
+	if(flag) {
+
+		printf("%d\n", ans);
+
+	}
+
+	return 0;
 
 }
 
-static int cmd_p (char *args)
-{
-  bool success = true;
-  uint32_t exp = expr(args,&success) ;
+static int cmd_w(char* args) {
 
-  //计算expr
-  if(!success)
-  {
-    printf("wrong expr\n");
-    return 0;
-  }else
-  {
-    printf("%u\n",exp);
-    return 0;
-  }
-  
-}
+	bool flag = true;
 
-static int cmd_d(char *args)
-{
-  remove_point(atoi(args));
-  return 0;
-}
+	uint32_t v = expr(args, &flag);
 
-static int cmd_w(char *args)
-{
-  if(args == NULL)
-  {
-    printf("no expr\n");
+  if(!flag){
+
+    printf("Bad expr!\n");
+
     return 0;
+
   }
 
-  add_point(args);
-  return 0;
+	WP *wp = new_wp();
+
+	if (wp == NULL) {
+
+		printf("No space to add an extra watchpoint!");
+
+		return 0;
+
+	}
+
+	strcpy(wp -> expr, args);
+
+	wp -> val = v;
+
+	printf("Succefully add watchpoint NO.%d\n", wp -> NO);
+
+	return 0;
+
+}
+
+static int cmd_d(char* args) {
+
+	int id;
+
+	sscanf(args, "%d", &id);
+
+	WP* wp = find_wp(id);
+
+	if (wp==NULL) {
+
+		printf("Cannot Find!\n");
+
+		return 0;
+
+	}
+
+	free_wp(wp);
+
+	printf("Succefully Delete!\n");
+
+	return 0;
+
 }
 
 static struct {
@@ -153,13 +177,12 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Single_step instruction execution",cmd_si },
-  { "info", "DIsplay information",cmd_info },
-  { "x", "Examine memory", cmd_x },
-  { "p", "Print the value of an experssion", cmd_p},
-  { "w", "Set a watchpoint for an expression", cmd_w},
-  { "d", "Delete a watchpoint by number", cmd_d}
-
+  {"si", "Single-step execute", cmd_si},
+  {"info", "Print paogram status", cmd_info},
+  {"x", "Scan memory", cmd_x},
+  {"p", "Expression calculate",cmd_p},
+  { "w", "Add watchpoint", cmd_w},
+  { "d", "Delete watchpoint", cmd_d},
   /* TODO: Add more commands */
 
 };

@@ -6,28 +6,20 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
    * That is, use ``NO'' to index the IDT.
    */
 
-  //TODO();
-  //计算中断描述符在IDT中地址
-  uint32_t idt_base = cpu.idtr.base;
-  uint32_t idt_limit = cpu.idtr.limit;
-  uint32_t idt_entry_addr = idt_base + NO *8;
-
-  assert(idt_entry_addr+7<=idt_base + idt_limit);
-  //读取IDT表项
-  uint32_t low = vaddr_read(idt_entry_addr,4);
-  uint32_t high = vaddr_read(idt_entry_addr+4,4);
-  //提取offset
-  uint32_t offset_low = low & 0x0000FFFF;
-  uint32_t offset_high = high &0xFFFF0000;
-  uint32_t handler_addr = offset_high |offset_low;
-  //压栈
-  rtl_push(&cpu.eflags);
-  rtl_push(&cpu.CS);
+  if (cpu.idtr.limit < 0) assert(0);
+ 
+  uint32_t cs_32 = cpu.cs; 
+  rtl_push(&cpu.eflags.value);
+  rtl_push(&cs_32);
   rtl_push(&ret_addr);
-  //printf("raise_intr:NO=0x%x,handler=0x%x\n",NO,handler_addr);
-  //设置跳转指令
-  decoding.jmp_eip = handler_addr;
-  decoding.is_jmp = 1;
+  vaddr_t gate_addr = cpu.idtr.base + 8 * NO;
+  
+  uint32_t high, low;
+  low = vaddr_read(gate_addr, 4) & 0xffff;
+  high = vaddr_read(gate_addr + 4, 4) & 0xffff0000;
+  //设置跳转
+  decoding.jmp_eip = high | low;
+  decoding.is_jmp = true;
 }
 
 void dev_raise_intr() {
