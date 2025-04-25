@@ -51,7 +51,7 @@ ssize_t fs_write(int fd,const void *buf,size_t len)
       }    
       return len;
     case FD_FB:
-      fb_write(buf,file_table[fd].open_offset,len);
+      fb_write((void*)buf,file_table[fd].open_offset,len);
       file_table[fd].open_offset += len;
       return len;
       
