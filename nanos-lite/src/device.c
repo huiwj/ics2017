@@ -9,7 +9,6 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t len) {
-  static uint32_t lasttime = 0;
   int key = _read_key();
   bool is_key_down = false;
 
@@ -21,19 +20,13 @@ size_t events_read(void *buf, size_t len) {
 
   if(key != _KEY_NONE)
   {
-    sprintf(buf,"%s %s\n",is_key_down ? "kd" : "ku",keyname[key]);
+    sprintf(buf,"\n=== KEY EVENT ===\n%s %s\n===============\n\n",is_key_down ? "kd" : "ku",keyname[key]);
     Log("Key Event: %s", buf);
   }
   else
   {
-    uint32_t nowtime = _uptime();
-    if(nowtime-lasttime >= 10000)
-    {
-      lasttime = nowtime;
-      sprintf(buf,"t %d\n",nowtime);
-    }
-    //sprintf(buf,"t %d\n",(uint32_t)_uptime());
-  }
+    sprintf(buf,"t %d\n",(uint32_t)_uptime());
+  } 
 
   return strlen(buf);
 }
