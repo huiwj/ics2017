@@ -18,7 +18,7 @@ uintptr_t loader(_Protect *as, const char *filename) {
   size_t size = fs_filesz(fd);
   //Log("Info: file size of '%s' is '%zu' bytes",filename,size);
 
-  fs_read(fd,(void*)DEFAULT_ENTRY,size);
+  fs_read(fd,DEFAULT_ENTRY,size);
   //Log("Info size filename:",size,filename,DEFAULT_ENTRY);
   fs_close(fd);
   
