@@ -9,6 +9,7 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t len) {
+  static uint32_t lasttime = 0;
   int key = _read_key();
   bool is_key_down = false;
 
@@ -25,7 +26,13 @@ size_t events_read(void *buf, size_t len) {
   }
   else
   {
-    sprintf(buf,"t %d\n",(uint32_t)_uptime());
+    uint32_t nowtime = _uptime();
+    if(nowtime-lasttime >= 10000)
+    {
+      lasttime = nowtime;
+      sprintf(buf,"t %d\n",nowtime);
+    }
+    //sprintf(buf,"t %d\n",(uint32_t)_uptime());
   }
 
   return strlen(buf);
