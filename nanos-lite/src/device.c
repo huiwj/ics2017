@@ -15,10 +15,19 @@ size_t events_read(void *buf, size_t len) {
     Log("Rae Key: 0x%X\n",key);
     int is_press = (key & 0x8000)?1:0;
     int keybord = key & 0x7FFF;
-    const char * act = is_press ? "kd" : "ku";
-    const char * name = keyname[keybord];
-    sprintf(buf,"%s %s\n",act,name);
-    return strlen(buf);
+    if(keybord<sizeof(keyname)/sizeof(keyname[0]))
+    {
+      const char * act = is_press ? "kd" : "ku";
+      const char * name = keyname[keybord];
+      int n = snprintf(buf,len,"%s %s\n",act,name);
+      return (n>0)?n:0;
+    }
+    else
+    {
+      snprintf(buf,len,"UNnknow Key :%s %s\n");
+      return strlen(buf);
+    }
+    
   }
   
   {
