@@ -84,7 +84,7 @@ int fs_open(const char *pathname,int flags, int mode)
 
 ssize_t fs_read(int fd,void *buf,size_t len)
 {
-  Log("fs_read:fd=%d,request len = %zu,open_offset = %d",fd,len,file_table[fd].open_offset);
+  //Log("fs_read:fd=%d,request len = %zu,open_offset = %d",fd,len,file_table[fd].open_offset);
   if(file_table[fd].open_offset + len > file_table[fd].size)
   {
     len = file_table[fd].size - file_table[fd].open_offset;
