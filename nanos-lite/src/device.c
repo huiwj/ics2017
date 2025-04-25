@@ -20,8 +20,9 @@ size_t events_read(void *buf, size_t len) {
 
   if(key != _KEY_NONE)
   {
-    sprintf(buf,"\n=== KEY EVENT ===\n%s %s\n===============\n\n",is_key_down ? "kd" : "ku",keyname[key]);
+    sprintf(buf,"%s %s\n",is_key_down ? "kd" : "ku",keyname[key]);
     Log("Key Event: %s", buf);
+    assert(0 && "key bord");
   }
   else
   {
