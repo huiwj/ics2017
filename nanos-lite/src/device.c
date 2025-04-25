@@ -18,7 +18,7 @@ size_t events_read(void *buf, size_t len) {
     bool is_key_down = false;
     if(key & 0x8000)
     {
-      key ^= 0x8000;
+      key &= 0x7FFF;
       is_key_down = true;
     }
     sprintf(buf,"%s %s\n",is_key_down ? "kd" : "ku",keyname[key]);
