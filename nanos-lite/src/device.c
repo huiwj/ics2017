@@ -24,7 +24,7 @@ size_t events_read(void *buf, size_t len) {
   }
   else
   {
-    //sprintf(buf,"t %d\n",(uint32_t)_uptime());
+    sprintf(buf,"t %d\n",(uint32_t)_uptime());
   }
 
   return strlen(buf);
