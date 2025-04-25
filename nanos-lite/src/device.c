@@ -10,23 +10,17 @@ static const char *keyname[256] __attribute__((used)) = {
 
 size_t events_read(void *buf, size_t len) {
   int key = _read_key();
-
-  Log("key:0x%X\n",key);
-
   if(key != _KEY_NONE)
   {
-    bool is_key_down = false;
-    if(key & 0x8000)
-    {
-      key &= 0x7FFF;
-      is_key_down = true;
-    }
-    sprintf(buf,"%s %s\n",is_key_down ? "kd" : "ku",keyname[key]);
-
-    Log("Key Event: %s", buf);
-    assert(0 && "key bord");
+    Log("Rae Key: 0x%X\n",key);
+    int is_press = (key & 0x8000)?1:0;
+    int keybord = key & 0x7FFF;
+    const char * act = is_press ? "kd" : "ku";
+    const char * name = keyname[keybord];
+    sprintf(buf,"%s %s\n",act,name);
+    return strlen(buf);
   }
-  else
+  
   {
     sprintf(buf,"t %d\n",(uint32_t)_uptime());
   } 
