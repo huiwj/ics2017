@@ -6,7 +6,7 @@ extern uint8_t ramdisk_end;
 
 /* The kernel is monolithic, therefore we do not need to
  * translate the address `buf' from the user process to
- * a physical one, w hich is necessary for a microkernel.
+ * a physical one, w hgftvyhich is necessary for a microkernel.
  */
 
 /* read `len' bytes starting from `offset' of ramdisk into `buf' */

@@ -124,6 +124,11 @@ off_t fs_lseek(int fd,off_t offset, int whence)
   Finfo *f = &file_table[fd];
   off_t new_offset = 0;
 
+  if(fd<3)
+  {
+    return 0;
+  }
+
   switch (whence)
   {
   case SEEK_SET:
@@ -136,10 +141,11 @@ off_t fs_lseek(int fd,off_t offset, int whence)
     new_offset = f->size + offset;
     break;
   default:
+    assert("Unexpected whence in fs_lseek");
     return -1;
   }
 
-  if(new_offset > f->size)
+  if(new_offset > f->size||new_offset<0)
   {
     return -1;
   }
