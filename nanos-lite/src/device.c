@@ -24,7 +24,7 @@ size_t events_read(void *buf, size_t len) {
   }
   else
   {
-    sprintf(buf,"t %d\n",(uint32_t)_uptime());
+    //sprintf(buf,"t %d\n",(uint32_t)_uptime());
   }
 
   return strlen(buf);
@@ -32,10 +32,8 @@ size_t events_read(void *buf, size_t len) {
 
 static char dispinfo[128] __attribute__((used));
 
-ssize_t dispinfo_read(void *buf, off_t offset, size_t len) {
-  
+void dispinfo_read(void *buf, off_t offset, size_t len) { 
   memcpy(buf,dispinfo + offset,len);
-  return len;
 }
 
 void fb_write(const void *buf, off_t offset, size_t len) {
