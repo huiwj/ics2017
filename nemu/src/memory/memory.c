@@ -1,5 +1,6 @@
 #include "nemu.h"
 #include "device/mmio.h"
+#include "memory/mmu.h"
 
 #define PMEM_SIZE (128 * 1024 * 1024)
 
@@ -31,10 +32,56 @@ void paddr_write(paddr_t addr, int len, uint32_t data) {
     memcpy(guest_to_host(addr), &data, len);
 }
 
+#define PDX(va)         (((uint32_t)(va) >> 22) & 0x3ff)
+#define PTX(va)         (((uint32_t)(va) >> 12) & 0x3ff)
+#define OFF(va)         ((uint32_t)(va)  & 0xfff)
+
+paddr_t page_translate(vaddr_t addr,bool dirty)
+{
+  if(cpu.CR0 >> 31 !=1)
+  {
+    return addr;
+  }
+
+  PDE* pgdir = (PDE*)(cpu.CR3 & 0xfffff000);
+  PDE pde;
+  pde.val = paddr_read((paddr_t)&(pgdir[PDX(addr)]),4);
+
+  assert(pde.present);
+
+  pde.accessed = true;
+  PTE* ptep = (PTE*)(uint32_t)(pde.val & 0xfffff000);
+  PTE pte;
+  pte.val = paddr_read((paddr_t)&(ptep[PTX(addr)]),4);
+  assert(pte.present);
+  
+  pte.accessed = true;
+  pte.dirty = dirty;
+
+  return(pte.val & ~0xfff) | OFF(addr);
+}
+
 uint32_t vaddr_read(vaddr_t addr, int len) {
-  return paddr_read(addr, len);
+  uint32_t ret = 0;
+  if((addr & 0xfffff000)!=((addr+len-1)&0xfffff000))
+  {
+    for (int i =0;i<len;i++)
+    {
+      paddr_t paddr = page_translate(addr+i,false);
+      ret |= paddr_read(paddr,1)<<(8*i);
+    }
+    return ret;
+  }
+  paddr_t paddr = page_translate(addr,false);
+  ret = paddr_read(paddr,len);
+  return ret;
 }
 
 void vaddr_write(vaddr_t addr, int len, uint32_t data) {
-  paddr_write(addr, len, data);
+  if((addr & 0xfffff000)!= ((addr+len-1)&0xfffff000))
+  {
+    assert(0);
+  }
+  paddr_t paddr = page_translate(addr,true);
+  paddr_write(paddr, len, data);
 }

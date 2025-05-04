@@ -84,6 +84,7 @@ static inline void restart() {
   cpu.eip = ENTRY_START;
   cpu.eflags= 2;//设置IF标志位为1
   cpu.CS =8;
+  cpu.CR0 = 0x60000011;
 
 #ifdef DIFF_TEST
   init_qemu_reg();
