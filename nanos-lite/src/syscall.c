@@ -7,6 +7,12 @@ extern ssize_t fs_read(int fd,void *buf,size_t len);
 extern int fs_close(int fd);
 extern size_t fs_filesz(int fd);
 extern off_t fs_lseek(int fd,off_t offset, int whence);
+extern int mm_brk(uint32_t new_brk);
+
+int sys_brk(void *addr)
+{
+  return mm_brk((uint32_t)addr);
+}
 
 _RegSet* do_syscall(_RegSet *r) {
   uintptr_t a[4];
