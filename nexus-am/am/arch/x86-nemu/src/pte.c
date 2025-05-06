@@ -75,7 +75,7 @@ void _map(_Protect *p, void *va, void *pa) {
   else
   {
     ptep = (PTE*)palloc_f();
-    *pg = PTE_ADDR(pg) | 0x1;
+    *pg = PTE_ADDR(ptep) | 0x1;
   }
 
   ptep[PTX(va)]=PTE_ADDR(pa) | 0x1;
