@@ -16,8 +16,6 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uint32_t new_brk) {
-  int iter;
-  void *pageptr;
 
   if(current->cur_brk == 0)
   {
@@ -27,12 +25,18 @@ int mm_brk(uint32_t new_brk) {
   {
     if(new_brk>current->max_brk)
     {
-      for(iter = current->max_brk+(current->max_brk % 0x1000!=0?(0x1000-current->max_brk % 0x1000):0);iter<new_brk;iter+=0x1000)
-      {
-        pageptr = new_page();
-        _map(&(current->as),(void*)iter,pageptr);
-      }
-      current->max_brk = new_brk;
+     uint32_t max = (((uint32_t)(current->max_brk)+0xfff)& 0xfffff000);
+     int size = new_brk - max;
+     void* pa;
+     void* va = (void*)max;
+     while(size > 0)
+     {
+       pa = new_page();
+       _map(&(current->as),va,pa);
+       va+=4096;
+       size -= 4096;
+     }
+     current->max_brk = new_brk;
     }
     current->cur_brk = new_brk;
   }
