@@ -32,7 +32,13 @@ int count = 0;
 _RegSet* schedule(_RegSet *prev) {
   current->tf = prev;
 
-  current = (current==&pcb[0] ? &pcb[1] : &pcb[0]);
+  current = (current==&pcb[0] && count > 1000 ? &pcb[1] : &pcb[0]);
+  if(count > 1000)
+  {
+    count = 0;
+  }
+
+  count++;
   Log("PTR:0x%x\n",(uint32_t)current->as.ptr);
 
   _switch(&current->as);
