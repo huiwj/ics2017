@@ -11,7 +11,7 @@ static _RegSet* do_event(_Event e, _RegSet* r) {
       break;
     case _EVENT_TRAP:
       Log("Trap : 0x81");
-      do_syscall(r);
+      //do_syscall(r);
       return schedule(r);
       break;
     default: panic("Unhandled event ID = %d", e.event);
