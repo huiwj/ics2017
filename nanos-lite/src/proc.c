@@ -33,13 +33,13 @@ _RegSet* schedule(_RegSet *prev) {
   current->tf = prev;
 
   count++;
-  if(count == 0)
+  if(count %1000 == 0)
   {
-    count = 0 ;
+    
     current = &pcb[1];
   }else
   {
-    current = cur ? &pcb[0] : &pcb[2];
+    current = &pcb[0] ;
   }
 
   _switch(&current->as);
