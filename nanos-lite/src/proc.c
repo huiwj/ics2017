@@ -27,20 +27,13 @@ void load_prog(const char *filename) {
 }
 
 int count = 0;
-bool cur = 1;
+
 
 _RegSet* schedule(_RegSet *prev) {
   current->tf = prev;
 
-  count++;
-  if(count %1000 == 0)
-  {
-    
-    current = &pcb[1];
-  }else
-  {
-    current = &pcb[0] ;
-  }
+  current = (current==&pcb[0] ? &pcb[1] : &pcb[0]);
+  Log("PTR:0x%x\n",(uint32_t)current->as.ptr);
 
   _switch(&current->as);
 
