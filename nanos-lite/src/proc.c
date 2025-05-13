@@ -27,13 +27,14 @@ void load_prog(const char *filename) {
 }
 
 int count = 0;
+bool cur_gam = 1;
 
 
 _RegSet* schedule(_RegSet *prev) {
   current->tf = prev;
 
-  current = (current==&pcb[0] && count > 1000 ? &pcb[1] : &pcb[0]);
-  if(count > 1000)
+  current = (count == 1000 ? &pcb[1] :(cur_gam ? &pcb[0]:&pcb[2]));
+  if(count == 1000)
   {
     count = 0;
   }
