@@ -8,6 +8,8 @@ static const char *keyname[256] __attribute__((used)) = {
   _KEYS(NAME)
 };
 
+extern bool cur_gam ;
+
 size_t events_read(void *buf, size_t len) {
   int key = _read_key();
   bool is_down = false;
@@ -15,6 +17,11 @@ size_t events_read(void *buf, size_t len) {
   {
     key &= 0xfff;
     is_down = 1;
+    if (key == 13)
+    {
+      Log("F12");
+      cur_gam = !cur_gam;
+    }
   }
   if(key)
   {
