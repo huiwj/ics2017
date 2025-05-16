@@ -116,3 +116,36 @@ make_EHelper(rol) //左循环移位
   rtl_update_ZFSF(&t0,id_dest->width);
   print_asm_template2(rol);
 }
+
+make_EHelper(shld)
+{
+  //左移，结果存到t0
+  rtl_shr(&t0,&id_dest->val,&id_src->val);
+  rtl_li(&t2,id_src2->width);//t2
+  rtl_shli(&t2,&t2,3);//t2 = t2 *8
+  rtl_subi(&t2,&t2,id_src->val);//t2 = t2 - count
+  rtl_shr(&t2,&id_src2->val,&t2);//获取补位
+  rtl_or(&t0,&t0,&t2);//拼接
+  operand_write(id_dest,&t0);//写回
+  rtl_update_ZFSF(&t0,id_dest->width);
+  print_asm_template3(shld);
+}
+
+make_EHelper(shrd)
+{
+  //右移
+  rtl_shr(&t0,&id_dest->val,&id_src->val);
+  //t2 = id_src2->width
+  rtl_li(&t2,id_src2->width);
+  //t2=t2*8
+  rtl_shli(&t2,&t2,3);
+  //t2 =t2 - count
+  rtl_subi(&t2,&t2,id_src->val);
+  //t2 = src << (bit_width -count)
+  rtl_shl(&t2,&id_src2->val,&t2);
+  //拼接
+  rtl_or(&t0,&t0,&t2);
+  operand_write(id_dest,&t0);
+  rtl_update_ZFSF(&t0,id_dest->width);
+  print_asm_template3(shrd);
+}
