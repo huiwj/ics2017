@@ -10,16 +10,16 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 FLOAT F_div_F(FLOAT a, FLOAT b) {
   //assert(0);
 
-  int is_neg = 0;//记录符号
+  int is_neg = 1;//记录符号
   if(a<0)
   {
     a=-a;
-    is_neg ^= 1;
+    is_neg = -is_neg;
   }
   if(b<0)
     {
       b=-b;
-      is_neg ^= 1;
+      is_neg = -is_neg;
     }
 
 //初始整数
@@ -37,7 +37,7 @@ for(int i=0;i<16;++i)
   }
 }
 
-  return is_neg? -quotient : quotient;
+  return is_neg*quotient;
 }
 
 FLOAT f2F(float a) {
@@ -53,31 +53,38 @@ FLOAT f2F(float a) {
 
   //assert(0);
 
-  uint32_t bits;
-  memcpy(&bits,&a,sizeof(bits));
-
-  //拆解IEEE 754结构
-  int sign = bits >> 31;
-  int exp = ((bits>>23) & 0xFF)-127;//减去bias
-  uint32_t frac = bits & 0x7FFFFF; //原始小数
-  uint32_t mantissa = frac | 0x80000000; //隐藏位1
-
-  int64_t value = (int64_t)mantissa; //32位定点格式
-
-  if(exp >= 0)
+ 
+  union float_
   {
-    value <<= exp; //左移放大
+    struct 
+    {
+      uint32_t max:23;
+      uint32_t exp:8;
+      uint32_t sig:1;
+    };
+    uint32_t value;
+    
+  };
+  union float_ f;
+  
+  f.value = *((uint32_t*)(void*)&a);
+
+  int e = f.exp - 127;
+
+  FLOAT result;
+  if(e<=7)
+  {
+    result = (f.max | (1<<23)) >> 7-e;
   }
   else
   {
-    value >>= -exp; //右移减小
+    result = (f.max | (1<<23)) << (e-7);
   }
 
-  //小数点左移16位
-  value = (value * (1<<16))>>23;
-  if(sign) value = -value;
+  return f.sig == 0 ? result : (result | (1<<31));
   
-  return (int32_t)value;
+  
+  
 }
 
 FLOAT Fabs(FLOAT a) {
