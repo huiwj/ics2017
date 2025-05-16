@@ -34,7 +34,9 @@ _RegSet* schedule(_RegSet *prev) {
  
   current->tf = prev;
 
-  current = (count == 10 ? &pcb[1] :(cur_gam ? &pcb[0]:&pcb[2]));
+  //current = (count == 10 ? &pcb[1] :(cur_gam ? &pcb[0]:&pcb[2]));
+  current = &pcb[0] ;
+  /* 
   int pcb_id = (current == &pcb[0] ? 0:(current == &pcb[1] ? 1:2));
   Log("pcb[%d]",pcb_id);
   if(count == 10)
@@ -43,6 +45,7 @@ _RegSet* schedule(_RegSet *prev) {
   }
 
   count++;
+  */
   Log("PTR:0x%x\n",(uint32_t)current->as.ptr);
 
   _switch(&current->as);
