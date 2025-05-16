@@ -31,7 +31,7 @@ bool cur_gam = 1;
 
 
 _RegSet* schedule(_RegSet *prev) {
-  /* 
+ 
   current->tf = prev;
 
   current = (count == 10 ? &pcb[1] :(cur_gam ? &pcb[0]:&pcb[2]));
@@ -48,8 +48,7 @@ _RegSet* schedule(_RegSet *prev) {
   _switch(&current->as);
 
   return current->tf;
-  */
- return NULL;
+
 
   
 }
