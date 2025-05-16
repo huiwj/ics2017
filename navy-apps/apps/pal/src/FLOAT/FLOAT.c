@@ -10,16 +10,16 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 FLOAT F_div_F(FLOAT a, FLOAT b) {
   //assert(0);
 
-  int is_neg = 1;//记录符号
+  int is_neg = 0;//记录符号
   if(a<0)
   {
     a=-a;
-    is_neg = -is_neg;
+    is_neg ^= 1;
   }
   if(b<0)
     {
       b=-b;
-      is_neg = -is_neg;
+      is_neg ^= 1;
     }
 
 //初始整数
@@ -37,7 +37,7 @@ for(int i=0;i<16;++i)
   }
 }
 
-  return is_neg*quotient;
+  return is_neg ? -quotient : quotient;
 }
 
 FLOAT f2F(float a) {
