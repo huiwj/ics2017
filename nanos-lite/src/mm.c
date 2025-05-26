@@ -17,28 +17,29 @@ void free_page(void *p) {
 /* The brk() system call handler. */
 int mm_brk(uint32_t new_brk) {
 
-  if(current->cur_brk == 0)
+  if(current->cur_brk == 0) //初始化堆空间
   {
     current->cur_brk = current->max_brk = new_brk;
   }
   else
   {
-    if(new_brk>current->max_brk)
+    if(new_brk>current->max_brk) //扩展堆
     {
+      //对齐页边界
      uint32_t max = (((uint32_t)(current->max_brk)+0xfff)& 0xfffff000);
      int size = new_brk - max;
      void* pa;
      void* va = (void*)max;
-     while(size > 0)
+     while(size > 0) //循环分配
      {
        pa = new_page();
-       _map(&(current->as),va,pa);
+       _map(&(current->as),va,pa); //建立映射
        va+=4096;
        size -= 4096;
      }
-     current->max_brk = new_brk;
+     current->max_brk = new_brk; //更新最大堆地址
     }
-    current->cur_brk = new_brk;
+    current->cur_brk = new_brk; //更新堆顶
   }
 
   return 0;

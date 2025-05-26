@@ -65,20 +65,20 @@ void _switch(_Protect *p) {
   set_cr3(p->ptr);
 }
 
-void _map(_Protect *p, void *va, void *pa) {
-  PDE* pg = &((PDE*)(p->ptr))[PDX(va)];
+void _map(_Protect *p, void *va, void *pa) { //虚拟到物理
+  PDE* pg = &((PDE*)(p->ptr))[PDX(va)]; //页目录
   PTE* ptep;
-  if(*pg & 0x1)
+  if(*pg & 0x1) //页表是否存在
   {
     ptep = (PTE*)PTE_ADDR(*pg);
   }
   else
   {
-    ptep = (PTE*)palloc_f();
-    *pg = PTE_ADDR(ptep) | 0x1;
+    ptep = (PTE*)palloc_f(); //分配新页表
+    *pg = PTE_ADDR(ptep) | 0x1; //设置present
   }
 
-  ptep[PTX(va)]=PTE_ADDR(pa) | 0x1;
+  ptep[PTX(va)]=PTE_ADDR(pa) | 0x1; //设置页表项
   
 }
 

@@ -11,7 +11,7 @@ typedef struct {
   ioaddr_t low;
   ioaddr_t high;
   pio_callback_t callback;
-} PIO_t;
+} PIO_t; //端口与设备映射
 
 static PIO_t maps[NR_MAP];
 static int nr_map = 0;

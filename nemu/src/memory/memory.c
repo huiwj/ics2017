@@ -38,19 +38,19 @@ void paddr_write(paddr_t addr, int len, uint32_t data) {
 
 paddr_t page_translate(vaddr_t addr,bool dirty)
 {
-  if(cpu.CR0 >> 31 !=1)
+  if(cpu.CR0 >> 31 !=1) //分页机制启用
   {
     return addr;
   }
 
-  PDE* pgdir = (PDE*)(cpu.CR3 & 0xfffff000);
+  PDE* pgdir = (PDE*)(cpu.CR3 & 0xfffff000); //页目录基地址
   PDE pde;
-  pde.val = paddr_read((paddr_t)&(pgdir[PDX(addr)]),4);
+  pde.val = paddr_read((paddr_t)&(pgdir[PDX(addr)]),4); //页目录项，读取
 
   assert(pde.present);
 
   pde.accessed = true;
-  PTE* ptep = (PTE*)(uint32_t)(pde.val & 0xfffff000);
+  PTE* ptep = (PTE*)(uint32_t)(pde.val & 0xfffff000); //页表项
   PTE pte;
   pte.val = paddr_read((paddr_t)&(ptep[PTX(addr)]),4);
   assert(pte.present);
@@ -58,22 +58,22 @@ paddr_t page_translate(vaddr_t addr,bool dirty)
   pte.accessed = true;
   pte.dirty = dirty;
 
-  return(pte.val & ~0xfff) | OFF(addr);
+  return(pte.val & ~0xfff) | OFF(addr); //基地址|虚拟地址偏移
 }
 
 uint32_t vaddr_read(vaddr_t addr, int len) {
   uint32_t ret = 0;
-  if((addr & 0xfffff000)!=((addr+len-1)&0xfffff000))
+  if((addr & 0xfffff000)!=((addr+len-1)&0xfffff000)) //是否跨页
   {
-    for (int i =0;i<len;i++)
+    for (int i =0;i<len;i++) //跨字节处理
     {
       paddr_t paddr = page_translate(addr+i,false);
       ret |= paddr_read(paddr,1)<<(8*i);
     }
     return ret;
   }
-  paddr_t paddr = page_translate(addr,false);
-  ret = paddr_read(paddr,len);
+  paddr_t paddr = page_translate(addr,false); //翻译地址
+  ret = paddr_read(paddr,len); //物理内存
   return ret;
 }
 
