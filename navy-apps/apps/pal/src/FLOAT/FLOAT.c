@@ -28,9 +28,9 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 //扩展小数
 for(int i=0;i<16;++i)
 {
-  quotient <<=1;
-  remainder <<=1;
-  if(remainder >= b)
+  quotient <<=1; //左移一位
+  remainder <<=1; //余数*2
+  if(remainder >= b) //大于除数
   {
     remainder -= b;
     quotient |= 1;
@@ -58,9 +58,9 @@ FLOAT f2F(float a) {
   {
     struct 
     {
-      uint32_t max:23;
-      uint32_t exp:8;
-      uint32_t sig:1;
+      uint32_t max:23; //尾数
+      uint32_t exp:8; //指数
+      uint32_t sig:1; //符号位
     };
     uint32_t value;
     
@@ -69,7 +69,7 @@ FLOAT f2F(float a) {
   
   f.value = *((uint32_t*)(void*)&a);
 
-  int e = f.exp - 127;
+  int e = f.exp - 127; //偏移指数转为实际指数值
 
   FLOAT result;
   if(e<=7)

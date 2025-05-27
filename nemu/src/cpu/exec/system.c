@@ -9,12 +9,12 @@ make_EHelper(lidt) {
   //TODO();
   rtl_li(&t0,id_dest->addr);
 
-  cpu.idtr.limit = vaddr_read(t0,2);
+  cpu.idtr.limit = vaddr_read(t0,2); //读取两字节表示IDT表大小
 
-  cpu.idtr.base = vaddr_read(t0+2,4);
+  cpu.idtr.base = vaddr_read(t0+2,4); //基地址
   if(decoding.is_operand_size_16)
   {
-    cpu.idtr.base &= 0x00ffffff;
+    cpu.idtr.base &= 0x00ffffff; //保留低24
   }
 
   print_asm_template1(lidt);

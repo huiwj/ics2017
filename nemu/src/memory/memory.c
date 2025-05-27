@@ -45,20 +45,20 @@ paddr_t page_translate(vaddr_t addr,bool dirty)
 
   PDE* pgdir = (PDE*)(cpu.CR3 & 0xfffff000); //页目录基地址
   PDE pde;
-  pde.val = paddr_read((paddr_t)&(pgdir[PDX(addr)]),4); //页目录项，读取
+  pde.val = paddr_read((paddr_t)&(pgdir[PDX(addr)]),4); //提取虚拟地址的目录索引，高10
 
   assert(pde.present);
 
-  pde.accessed = true;
+  pde.accessed = true; //访问
   PTE* ptep = (PTE*)(uint32_t)(pde.val & 0xfffff000); //页表项
   PTE pte;
-  pte.val = paddr_read((paddr_t)&(ptep[PTX(addr)]),4);
+  pte.val = paddr_read((paddr_t)&(ptep[PTX(addr)]),4); //中间索引
   assert(pte.present);
   
   pte.accessed = true;
-  pte.dirty = dirty;
+  pte.dirty = dirty; //写操作
 
-  return(pte.val & ~0xfff) | OFF(addr); //基地址|虚拟地址偏移
+  return(pte.val & ~0xfff) | OFF(addr); //清楚页内偏移|页内偏移
 }
 
 uint32_t vaddr_read(vaddr_t addr, int len) {
