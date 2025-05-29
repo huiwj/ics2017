@@ -9,6 +9,8 @@
 // TODO: discuss with syscall interface
 #ifndef __ISA_NATIVE__
 
+extern char _end;
+
 // FIXME: this is temporary
 
 int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2){
@@ -22,27 +24,40 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
-  _exit(SYS_open);
+  return _syscall_(SYS_open,(uint32_t)path,flags,mode);
 }
 
 int _write(int fd, void *buf, size_t count){
-  _exit(SYS_write);
+  return _syscall_(SYS_write,fd,(uintptr_t)buf,count);
 }
 
 void *_sbrk(intptr_t increment){
-  return (void *)-1;
+  static intptr_t current_brk = (intptr_t)&_end;  //当前program break
+  intptr_t old_brk = current_brk;
+  //初始化
+  intptr_t new_brk = current_brk + increment;
+  //系统调用尝试设置新pb
+  int ret = _syscall_(SYS_brk,new_brk,0,0);
+  if(ret==0)
+  {
+    old_brk = current_brk;
+    current_brk = new_brk;//更新当前值
+    return (void*)old_brk;
+  }
+  else
+    return (void *)-1;
 }
 
 int _read(int fd, void *buf, size_t count) {
-  _exit(SYS_read);
+  return _syscall_(SYS_read,fd,(uint32_t)buf,count);
 }
 
 int _close(int fd) {
-  _exit(SYS_close);
+  return _syscall_(SYS_close,fd,0,0);
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
-  _exit(SYS_lseek);
+  return _syscall_(SYS_lseek,fd,offset,whence);
 }
 
 // The code below is not used by Nanos-lite.
